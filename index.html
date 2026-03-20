@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AbracadabraIMC⁷ · Portal · v0.8</title>
+<title>AbracadabraIMC⁷ · Portal · v0.9</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- Firebase via REST API — sem SDK externo -->
 <style>
@@ -129,11 +129,12 @@ html,body{height:100%;background:var(--dark);font-family:var(--font-body);color:
 .wr-title-block{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);z-index:4;text-align:center;white-space:nowrap}
 .wr-title{font-family:var(--font-title);font-size:15px;color:var(--gold);letter-spacing:3px}
 .wr-sub{font-size:9px;color:var(--cyan);letter-spacing:4px;margin-top:3px}
-.wr-nichos{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:4;display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:660px}
+.wr-nichos{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);z-index:4;display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:660px;padding:0 10px}
 .nicho-btn{background:rgba(8,12,24,.88);border:1px solid var(--border);color:rgba(255,255,255,.6);font-family:var(--font-body);font-size:11px;padding:7px 14px;cursor:pointer;letter-spacing:1px;transition:all .2s;white-space:nowrap}
 .nicho-btn:hover,.nicho-btn.sel{background:var(--gold-dim);border-color:var(--gold);color:var(--gold)}
 .wr-sidebar{position:absolute;top:0;left:0;bottom:0;width:190px;z-index:4;background:rgba(5,8,16,.88);border-right:1px solid var(--border);padding:16px 12px;overflow-y:auto}
 .wr-sidebar-r{position:absolute;top:0;right:0;bottom:0;width:190px;z-index:4;background:rgba(5,8,16,.88);border-left:1px solid var(--border);padding:16px 12px;overflow-y:auto}
+@media(max-width:600px){.wr-sidebar,.wr-sidebar-r{display:none}}
 .sidebar-title{font-family:var(--font-title);font-size:9px;color:rgba(201,168,76,.4);letter-spacing:3px;margin-bottom:12px}
 .sent-item{display:flex;align-items:center;gap:8px;padding:8px;margin-bottom:6px;border:1px solid transparent;cursor:pointer;transition:all .2s}
 .sent-item:hover,.sent-item.sel{background:rgba(0,212,255,.06);border-color:rgba(0,212,255,.2)}
@@ -623,8 +624,10 @@ html,body{height:100%;background:var(--dark);font-family:var(--font-body);color:
     </div>
 
     <!-- Enter button -->
-    <div class="wr-enter">
-      <button class="wr-enter-btn" onclick="enterSala()">ENTRAR NA SALA →</button>
+    <div id="wr-enter-fixed" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:20">
+      <button onclick="enterSala()" style="background:linear-gradient(135deg,#C9A84C,#E8C96A);border:none;color:#050810;font-family:'Cinzel',serif;font-size:12px;padding:14px 40px;letter-spacing:2px;cursor:pointer;box-shadow:0 4px 24px rgba(201,168,76,0.5);white-space:nowrap">
+        ENTRAR NA SALA · <span id="nicho-label-btn">PROJETO</span> →
+      </button>
     </div>
   </div>
 </div>
@@ -958,6 +961,8 @@ function selNicho(el,id,nome){
   el.classList.add('sel');
   currentNicho=nome;
   state.nichoId=id;
+  const lbl=document.getElementById('nicho-label-btn');
+  if(lbl)lbl.textContent=nome.toUpperCase();
 }
 
 function enterSala(){
@@ -1125,13 +1130,15 @@ async function sendMsg(){
 
   try{
     const WORKER='https://abracadabraimc7-megx7.mitelmazard.workers.dev/chat';
+    const activeSent = state.sentinela || 'CG';
+    const activeSystem = systemPrompts[activeSent] || systemPrompts['CG'];
     const res=await fetch(WORKER,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        sentinela: state.sentinela,
-        nicho: state.nicho,
-        system: systemPrompts[state.sentinela]||systemPrompts.CG,
+        sentinela: activeSent,
+        nicho: state.nicho || 'Projeto',
+        system: activeSystem,
         messages: state.conversationHistory
       })
     });
@@ -1232,6 +1239,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
-<div style="position:fixed;bottom:6px;right:10px;z-index:9999;font-family:monospace;font-size:9px;color:rgba(201,168,76,0.45);letter-spacing:1.5px;pointer-events:none">BUILD v0.8 | 19/03/2026 | Firebase/REST · Worker/Gemini</div>
+<div style="position:fixed;bottom:6px;right:10px;z-index:9999;font-family:monospace;font-size:9px;color:rgba(201,168,76,0.45);letter-spacing:1.5px;pointer-events:none">BUILD v0.9 | 20/03/2026 | NavFix · MobileFix · SentFix</div>
 </body>
 </html>
