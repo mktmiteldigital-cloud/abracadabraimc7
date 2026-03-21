@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AbracadabraIMC⁷ · Portal · v1.1</title>
+<title>AbracadabraIMC⁷ · Portal · v1.2</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- Firebase via REST API — sem SDK externo -->
 <style>
@@ -290,7 +290,7 @@ html,body{height:100%;background:var(--dark);font-family:var(--font-body);color:
       <div class="plano-pay" onclick="selectPay(this,'operador')">
         <div class="plano-pay-nome">PLANO OPERADOR</div>
         <div class="plano-pay-preco">R$97,33<span style="font-size:12px">/mês</span></div>
-        <div class="plano-pay-desc">10 salas · 5 nichos · 133 ORIN</div>
+        <div class="plano-pay-desc">10 salas · 13 nichos · 133 ORIN</div>
       </div>
       <div class="plano-pay" onclick="selectPay(this,'estrategista')">
         <div class="plano-pay-nome">ESTRATEGISTA</div>
@@ -359,7 +359,7 @@ html,body{height:100%;background:var(--dark);font-family:var(--font-body);color:
     <div class="portal-stats">
       <div><div class="stat-val">33</div><div class="stat-label">IAs ATIVAS</div></div>
       <div><div class="stat-val">10</div><div class="stat-label">PROVIDERS</div></div>
-      <div><div class="stat-val">9</div><div class="stat-label">NICHOS</div></div>
+      <div><div class="stat-val">13</div><div class="stat-label">NICHOS</div></div>
       <div><div class="stat-val">IA⁷</div><div class="stat-label">ARQUITETURA</div></div>
     </div>
   </div>
@@ -620,7 +620,9 @@ html,body{height:100%;background:var(--dark);font-family:var(--font-body);color:
       <button class="nicho-btn" onclick="selNicho(this,8,'Editorial')">EDITORIAL</button>
       <button class="nicho-btn" onclick="selNicho(this,9,'Hi-Tech Creators')">HI-TECH CREATORS</button>
       <button class="nicho-btn" onclick="selNicho(this,10,'Acadêmico / Educação')">ACADÊMICO / EDUCAÇÃO</button>
-      <button class="nicho-btn" onclick="selNicho(this,11,'Livre')">LIVRE</button>
+      <button class="nicho-btn" onclick="selNicho(this,11,'Ebook')">EBOOK</button>
+      <button class="nicho-btn" onclick="selNicho(this,12,'Vídeos / Filmes')">VÍDEOS / FILMES</button>
+      <button class="nicho-btn" onclick="selNicho(this,13,'Livre')">LIVRE</button>
     </div>
 
     <!-- Enter button -->
@@ -766,6 +768,32 @@ html,body{height:100%;background:var(--dark);font-family:var(--font-body);color:
 
 <script>
 // ── STATE ──────────────────────────────────────────────────────
+// ── RANKING DE SENTINELAS POR NICHO (orientado por ranking IMC7) ──
+const NICHO_RANKING = {
+  'Projeto':              [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.5},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:8.8},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:8.5}],
+  'Processo':             [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.3},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.0},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:8.6}],
+  'Flow':                 [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.2},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.0},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:8.7}],
+  'Empresarial':          [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.7},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.3},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.1}],
+  'Jurídico':             [{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.8},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.5},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.2}],
+  'Invenções':            [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.5},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.2},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.0}],
+  'Governamental':        [{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.4},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.2},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:8.9}],
+  'Editorial':            [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.8},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.4},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.8}],
+  'Hi-Tech Creators':     [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.6},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.3},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.0}],
+  'Acadêmico / Educação': [{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.5},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.3},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.7}],
+  'Ebook':                [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.7},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.4},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.9}],
+  'Vídeos / Filmes':      [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.6},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.2},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:8.8}],
+  'Livre':                [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.0},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.0},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.0}],
+};
+
+// ── ESTADOS DA SALA ─────────────────────────────────────────────
+// APRESENTACAO → CONFIRMACAO → TEMA → OPERACIONAL → LAUDO → ORIN
+const SALA_STATE = {
+  fase: 'APRESENTACAO', // fase atual do protocolo
+  tema: null,
+  rankingAtual: [],
+  laudoGerado: false,
+};
+
 const state = {
   plano: 'trial',
   provider: null,
@@ -781,14 +809,38 @@ const state = {
   fingerShown: false,
   payPlano: 'sessao',
   apiLoading: false,
-  // Histórico separado por sentinela
   histories: { CG:[], DS:[], GA:[], RF:[] },
   get conversationHistory(){ return this.histories[this.sentinela]||[]; },
-  pushHistory(role, content){ 
+  pushHistory(role, content){
     if(!this.histories[this.sentinela]) this.histories[this.sentinela]=[];
     this.histories[this.sentinela].push({role,content});
   }
 };
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+function nl2brSafe(str){
+  return escapeHtml(str).replace(/\n/g,'<br>');
+}
+
+function syncWarRoomSentinelaByNicho(){
+  const ranking = NICHO_RANKING[currentNicho] || NICHO_RANKING['Livre'];
+  const top = ranking[0];
+  if(!top) return;
+  currentSentWR = top.id;
+  document.querySelectorAll('.sent-item').forEach(s=>s.classList.remove('sel'));
+  const active = document.getElementById('wr-'+top.id);
+  if(active) active.classList.add('sel');
+  const lbl = document.getElementById('wr-sent-label');
+  if(lbl) lbl.textContent = top.nome;
+}
 
 // ── STARS ──────────────────────────────────────────────────────
 (function(){
@@ -969,35 +1021,99 @@ function selNicho(el,id,nome){
   state.nichoId=id;
   const lbl=document.getElementById('nicho-label-btn');
   if(lbl)lbl.textContent=nome.toUpperCase();
+  syncWarRoomSentinelaByNicho();
 }
 
 function enterSala(){
   state.nicho=currentNicho;
-  state.sentinela=currentSentWR;
-  const names={CG:'CG · GIDEÃO',DS:'DS · DOLA',GA:'GA · ARCANJOS',RF:'RF · RAFAEL'};
-  state.sentinelaNome=names[currentSentWR]||currentSentWR;
   state.sessionStart=new Date();
   state.msgCount=0;
   state.histories={CG:[],DS:[],GA:[],RF:[]};
 
-  // Update sala labels
-  document.getElementById('sala-nicho-label').textContent=state.nicho.toUpperCase();
-  document.getElementById('sala-sent-label').textContent=state.sentinelaNome;
-  document.getElementById('sala-nicho-sb').textContent=state.nicho.toUpperCase();
-  document.getElementById('init-nicho').textContent=state.nicho;
-  document.getElementById('initTime').textContent=new Date().toLocaleTimeString('pt-BR');
+  // Reset protocolo
+  SALA_STATE.fase='APRESENTACAO';
+  SALA_STATE.tema=null;
+  SALA_STATE.laudoGerado=false;
 
-  // Highlight selected sentinela sidebar
+  // Ranking do nicho
+  const ranking=NICHO_RANKING[state.nicho]||NICHO_RANKING['Livre'];
+  SALA_STATE.rankingAtual=ranking;
+  const top=ranking[0];
+  state.sentinela=top.id;
+  state.sentinelaNome=top.nome;
+
+  // Labels
+  document.getElementById('sala-nicho-label').textContent=state.nicho.toUpperCase();
+  document.getElementById('sala-sent-label').textContent=top.nome;
+  document.getElementById('sala-nicho-sb').textContent=state.nicho.toUpperCase();
+
+  // Sidebar highlight
   document.querySelectorAll('.sala-sent').forEach(s=>s.classList.remove('sel'));
-  const ss=document.getElementById('ss-'+currentSentWR);
+  const ss=document.getElementById('ss-'+top.id);
   if(ss)ss.classList.add('sel');
 
-  // Start timer
-  if(state.timerSeconds!==null){
+  // Clear chat
+  document.getElementById('messages').innerHTML='';
+
+  // Timer
+  if(state.plano==='trial'){
+    state.timerSeconds=1800;
     startTimer();
   }
 
   go('s-sala');
+  setTimeout(iniciarProtocoloEntrada,400);
+}
+
+function iniciarProtocoloEntrada(){
+  const ranking=SALA_STATE.rankingAtual;
+  const top=ranking[0];
+  const rankList=ranking.map((r,i)=>`${i+1}. ${r.nome} — nota ${r.nota}`).join('\n');
+  const msg=
+    `Nicho identificado: ${state.nicho.toUpperCase()}\n\n`+
+    `Com base no Ranking AbracadabraIMC⁷ — edição vigente, as sentinelas mais preparadas são:\n\n`+
+    rankList+'\n\n'+
+    `Sentinela recomendada: ${top.nome}\n\n`+
+    `Você aceita esta configuração?\nResponda SIM para confirmar ou NÃO para selecionar manualmente.`;
+  addProtocolMsg(top.id,top.nome,msg);
+  SALA_STATE.fase='CONFIRMACAO';
+}
+
+function addProtocolMsg(sentId,sentNome,content){
+  const msgs=document.getElementById('messages');
+  const now=new Date().toLocaleTimeString('pt-BR');
+  const colors={CG:'var(--cyan)',DS:'var(--green)',GA:'var(--cyan)',RF:'#A855F7'};
+  const color=colors[sentId]||'var(--cyan)';
+  const div=document.createElement('div');
+  div.className='msg sentinela';
+  div.innerHTML=`
+    <div class="msg-header">
+      <span class="msg-sender" style="color:${color}">${sentNome}</span>
+      <span class="msg-time">${now}</span>
+      <button class="msg-pin" onclick="togglePin(this)">⚑</button>
+    </div>
+    <div class="msg-bubble" style="white-space:pre-wrap">${escapeHtml(content)}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop=99999;
+}
+
+function gerarLaudo(){
+  SALA_STATE.laudoGerado=true;
+  SALA_STATE.fase='LAUDO';
+  const top=SALA_STATE.rankingAtual[0]||{id:'CG',nome:'CG · GIDEÃO'};
+  const laudo=
+    `LAUDO DE SESSÃO\n`+
+    `─────────────────────────────\n`+
+    `Nicho: ${state.nicho}\n`+
+    `Tema: ${SALA_STATE.tema||'Não definido'}\n`+
+    `Sentinela principal: ${state.sentinelaNome}\n`+
+    `Mensagens trocadas: ${state.msgCount}\n`+
+    `Início: ${state.sessionStart?state.sessionStart.toLocaleString('pt-BR'):'—'}\n`+
+    `─────────────────────────────\n`+
+    `Tema trabalhado com base no protocolo IMC⁷.\n\n`+
+    `Deseja registrar esta sessão no ORIN?\nResponda SIM para gerar o registro ou NÃO para encerrar.`;
+  addProtocolMsg(top.id,top.nome,laudo);
+  SALA_STATE.fase='ORIN_CONFIRM';
 }
 
 // ── S5: TIMER + GHOST ─────────────────────────────────────────
@@ -1099,7 +1215,7 @@ function addMsg(role,content,sentNome){
       <span class="msg-time">${now}</span>
       <button class="msg-pin" onclick="togglePin(this)">⚑</button>
     </div>
-    <div class="msg-bubble">${content.replace(/\n/g,'<br>')}</div>
+    <div class="msg-bubble">${nl2brSafe(content)}</div>
   `;
   msgs.appendChild(div);
   msgs.scrollTop=msgs.scrollHeight;
@@ -1139,6 +1255,102 @@ async function sendMsg(){
   if(!text)return;
   input.value='';
 
+  // ── PROTOCOLO DE ENTRADA ──────────────────────────────────────
+  const fase = SALA_STATE.fase;
+  const top = SALA_STATE.rankingAtual[0]||{id:'CG',nome:'CG · GIDEÃO'};
+
+  if(fase==='CONFIRMACAO'){
+    addMsg('user',text);
+    const resp=text.trim().toUpperCase();
+    if(resp.startsWith('S')||resp.includes('SIM')||resp.includes('ACEITO')||resp.includes('OK')){
+      SALA_STATE.fase='TEMA';
+      setTimeout(()=>{
+        addProtocolMsg(top.id,top.nome,
+          `Configuração confirmada. ${top.nome} está pronta para coordenar.
+
+Qual é o tema desta sessão?`);
+      },300);
+    } else {
+      SALA_STATE.fase='SELECAO_MANUAL';
+      setTimeout(()=>{
+        const opts = SALA_STATE.rankingAtual.map((r,i)=>
+          `${i+1}. ${r.nome} — nota ${r.nota}`).join('\\n');
+        addProtocolMsg(top.id,top.nome,
+          `Entendido. Selecione manualmente a sentinela desejada:
+
+${opts}
+
+Ou use o painel lateral para trocar.
+Digite o número ou nome da sentinela.`);
+      },300);
+    }
+    return;
+  }
+
+  if(fase==='SELECAO_MANUAL'){
+    addMsg('user',text);
+    const t=text.trim().toLowerCase();
+    const found=SALA_STATE.rankingAtual.find((r,i)=>
+      t.includes(r.nome.toLowerCase().split('·')[1]?.trim().toLowerCase()||'') ||
+      t.includes(r.id.toLowerCase()) ||
+      t===String(i+1)
+    );
+    if(found){
+      state.sentinela=found.id;
+      state.sentinelaNome=found.nome;
+      document.getElementById('sala-sent-label').textContent=found.nome;
+      document.querySelectorAll('.sala-sent').forEach(s=>s.classList.remove('sel'));
+      const el=document.getElementById('ss-'+found.id);
+      if(el)el.classList.add('sel');
+      SALA_STATE.fase='TEMA';
+      setTimeout(()=>{
+        addProtocolMsg(found.id,found.nome,
+          `${found.nome} assumindo coordenação.
+
+Qual é o tema desta sessão?`);
+      },300);
+    } else {
+      addProtocolMsg(top.id,top.nome,'Não identifiquei a sentinela. Use o painel lateral ou digite o nome.');
+    }
+    return;
+  }
+
+  if(fase==='TEMA'){
+    addMsg('user',text);
+    SALA_STATE.tema=text;
+    SALA_STATE.fase='OPERACIONAL';
+    setTimeout(()=>{
+      addProtocolMsg(state.sentinela,state.sentinelaNome,
+        `Tema registrado: "${text}"
+
+Você é o maestro desta sessão. Conduza como desejar.
+Quando quiser encerrar o tema, diga ENCERRAR ou LAUDO.`);
+    },300);
+    return;
+  }
+
+  if(fase==='ORIN_CONFIRM'){
+    addMsg('user',text);
+    const resp=text.trim().toUpperCase();
+    if(resp.startsWith('S')||resp.includes('SIM')){
+      fillOrin();
+      go('s-orin');
+    } else {
+      addProtocolMsg(top.id,top.nome,'Sessão encerrada sem registro ORIN. Até a próxima.');
+      SALA_STATE.fase='ENCERRADA';
+    }
+    return;
+  }
+
+  // Checar comando de encerramento
+  const textUp=text.trim().toUpperCase();
+  if(textUp==='ENCERRAR'||textUp==='LAUDO'||textUp==='FIM'){
+    addMsg('user',text);
+    gerarLaudo();
+    return;
+  }
+
+  // ── FLUXO OPERACIONAL NORMAL ──────────────────────────────────
   // Auto-detecta troca de sentinela na mensagem
   const detected=parseSentinela(text);
   if(detected && detected.id !== state.sentinela){
@@ -1258,7 +1470,7 @@ async function logout(){
         <span class="msg-time" id="initTime"></span>
         <button class="msg-pin" onclick="togglePin(this)">⚑</button>
       </div>
-      <div class="msg-bubble">Abracadabra.<br><br>Sou Claude Gideão — Arquiteto de Inteligência Sênior do AbracadabraIMC⁷. Nicho ativo: <strong id="init-nicho">Projeto</strong>. Sistema operacional. 33 IAs disponíveis em 10 providers.<br><br>Como posso coordenar a sua inteligência hoje?</div>
+      <div class="msg-bubble">Abracadabra.<br><br>Sou Claude Gideão — Arquiteto de Inteligência Sênior do AbracadabraIMC⁷. Nicho ativo: <strong id="init-nicho">${escapeHtml(state.nicho || 'Projeto')}</strong>. Sistema operacional. 33 IAs disponíveis em 10 providers.<br><br>Como posso coordenar a sua inteligência hoje?</div>
     </div>`;
   // Reset ORIN chips
   document.querySelectorAll('.orin-chip').forEach((c,i)=>{
@@ -1272,6 +1484,7 @@ async function logout(){
 // ── WARROOM PLANO LABEL ───────────────────────────────────────
 document.addEventListener('DOMContentLoaded',()=>{
   const labels={trial:'TRIAL 30MIN',operador:'OPERADOR',estrategista:'ESTRATEGISTA',megx7:'MEGX7'};
+  syncWarRoomSentinelaByNicho();
   setInterval(()=>{
     const el=document.getElementById('wr-plano-label');
     if(el)el.textContent=labels[state.plano]||state.plano.toUpperCase();
@@ -1279,6 +1492,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
-<div style="position:fixed;bottom:6px;right:10px;z-index:9999;font-family:monospace;font-size:9px;color:rgba(201,168,76,0.45);letter-spacing:1.5px;pointer-events:none">BUILD v1.1 | 20/03/2026 | HistSep · MultiAgentReal · Parser</div>
+<div style="position:fixed;bottom:6px;right:10px;z-index:9999;font-family:monospace;font-size:9px;color:rgba(201,168,76,0.45);letter-spacing:1.5px;pointer-events:none">BUILD v1.2 | 21/03/2026 | ProtocoloEntrada · Ranking · 13Nichos · Laudo</div>
 </body>
 </html>
