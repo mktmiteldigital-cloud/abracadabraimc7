@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AbracadabraIMC⁷ · Portal · v1.2</title>
+<title>AbracadabraIMC⁷ · Portal · v1.4</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- Firebase via REST API — sem SDK externo -->
 <style>
@@ -290,7 +290,7 @@ html,body{height:100%;background:var(--dark);font-family:var(--font-body);color:
       <div class="plano-pay" onclick="selectPay(this,'operador')">
         <div class="plano-pay-nome">PLANO OPERADOR</div>
         <div class="plano-pay-preco">R$97,33<span style="font-size:12px">/mês</span></div>
-        <div class="plano-pay-desc">10 salas · 13 nichos · 133 ORIN</div>
+        <div class="plano-pay-desc">10 salas · 5 nichos · 133 ORIN</div>
       </div>
       <div class="plano-pay" onclick="selectPay(this,'estrategista')">
         <div class="plano-pay-nome">ESTRATEGISTA</div>
@@ -314,10 +314,12 @@ html,body{height:100%;background:var(--dark);font-family:var(--font-body);color:
      S1 — PORTAL
 ═══════════════════════════════════ -->
 <div class="screen active" id="s-portal">
-  <div class="bg-radial"></div>
-  <div class="bg-grid"></div>
-  <canvas id="stars" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>
-  <div class="portal-content">
+  <video autoplay muted loop playsinline
+    style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0">
+    <source src="portal.mp4" type="video/mp4">
+  </video>
+  <div style="position:absolute;inset:0;background:rgba(5,8,16,0.52);z-index:1;pointer-events:none"></div>
+  <div class="portal-content" style="position:relative;z-index:2">
     <div class="pyramid-wrap">
       <svg width="200" height="172" viewBox="0 0 220 190">
         <defs>
@@ -523,9 +525,11 @@ html,body{height:100%;background:var(--dark);font-family:var(--font-body);color:
     <button class="back-btn" onclick="logout()">SAIR DO SISTEMA</button>
   </div>
   <div class="wr-body">
-    <div class="wr-bg"></div>
-    <div class="wr-grid"></div>
-    <div class="wr-overlay"></div>
+    <video autoplay muted loop playsinline
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0">
+      <source src="warroom.mp4" type="video/mp4">
+    </video>
+    <div style="position:absolute;inset:0;background:rgba(5,8,16,0.45);z-index:1;pointer-events:none"></div>
 
     <!-- Sidebar esquerda: Sentinelas -->
     <div class="wr-sidebar">
@@ -610,25 +614,25 @@ html,body{height:100%;background:var(--dark);font-family:var(--font-body);color:
 
     <!-- Nichos -->
     <div class="wr-nichos">
-      <button class="nicho-btn sel" onclick="selNicho(this,1,'Projeto')">PROJETO</button>
-      <button class="nicho-btn" onclick="selNicho(this,2,'Processo')">PROCESSO</button>
-      <button class="nicho-btn" onclick="selNicho(this,3,'Flow')">FLOW</button>
-      <button class="nicho-btn" onclick="selNicho(this,4,'Empresarial')">EMPRESARIAL</button>
-      <button class="nicho-btn" onclick="selNicho(this,5,'Jurídico')">JURÍDICO</button>
-      <button class="nicho-btn" onclick="selNicho(this,6,'Invenções')">INVENÇÕES</button>
-      <button class="nicho-btn" onclick="selNicho(this,7,'Governamental')">GOVERNAMENTAL</button>
-      <button class="nicho-btn" onclick="selNicho(this,8,'Editorial')">EDITORIAL</button>
-      <button class="nicho-btn" onclick="selNicho(this,9,'Hi-Tech Creators')">HI-TECH CREATORS</button>
-      <button class="nicho-btn" onclick="selNicho(this,10,'Acadêmico / Educação')">ACADÊMICO / EDUCAÇÃO</button>
-      <button class="nicho-btn" onclick="selNicho(this,11,'Ebook')">EBOOK</button>
-      <button class="nicho-btn" onclick="selNicho(this,12,'Vídeos / Filmes')">VÍDEOS / FILMES</button>
-      <button class="nicho-btn" onclick="selNicho(this,13,'Livre')">LIVRE</button>
+      <button class="nicho-btn sel" onclick="selNicho(this,1,'PROJETO')" title="PROJETO">I</button>
+      <button class="nicho-btn" onclick="selNicho(this,2,'PROCESSO')" title="PROCESSO">II</button>
+      <button class="nicho-btn" onclick="selNicho(this,3,'FLOW')" title="FLOW">III</button>
+      <button class="nicho-btn" onclick="selNicho(this,4,'EMPRESARIAL')" title="EMPRESARIAL">IV</button>
+      <button class="nicho-btn" onclick="selNicho(this,5,'JURÍDICO')" title="JURÍDICO">V</button>
+      <button class="nicho-btn" onclick="selNicho(this,6,'INVENÇÕES')" title="INVENÇÕES">VI</button>
+      <button class="nicho-btn" onclick="selNicho(this,7,'GOVERNAMENTAL')" title="GOVERNAMENTAL">VII</button>
+      <button class="nicho-btn" onclick="selNicho(this,8,'EDITORIAL')" title="EDITORIAL">VIII</button>
+      <button class="nicho-btn" onclick="selNicho(this,9,'HI-TECH CREATORS')" title="HI-TECH CREATORS">IX</button>
+      <button class="nicho-btn" onclick="selNicho(this,10,'ACADÊMICO / EDUCAÇÃO')" title="ACADÊMICO / EDUCAÇÃO">X</button>
+      <button class="nicho-btn" onclick="selNicho(this,11,'LIVRE')" title="LIVRE">XI</button>
+      <button class="nicho-btn" onclick="selNicho(this,12,'VÍDEO / CINEMA')" title="VÍDEO / CINEMA">XII</button>
+      <button class="nicho-btn" onclick="selNicho(this,13,'E-BOOK')" title="E-BOOK">XIII</button>
     </div>
 
     <!-- Enter button -->
     <div id="wr-enter-fixed" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:20">
       <button onclick="enterSala()" style="background:linear-gradient(135deg,#C9A84C,#E8C96A);border:none;color:#050810;font-family:'Cinzel',serif;font-size:12px;padding:14px 40px;letter-spacing:2px;cursor:pointer;box-shadow:0 4px 24px rgba(201,168,76,0.5);white-space:nowrap">
-        ENTRAR NA SALA · <span id="nicho-label-btn">PROJETO</span> →
+        ENTRAR NA SALA · <span id="nicho-label-btn">SALA I</span> →
       </button>
     </div>
   </div>
@@ -681,6 +685,10 @@ html,body{height:100%;background:var(--dark);font-family:var(--font-body);color:
       <div class="sala-sent" onclick="changeSent(this,'RF','RF · RAFAEL')" id="ss-RF">
         <div class="sala-sent-dot" style="background:#A855F7"></div>
         <div class="sala-sent-info"><div class="name">RF · RAFAEL</div><div class="role">Oposição</div></div>
+      </div>
+      <div class="sala-sent" onclick="changeSent(this,'PM','PM · PROFETA')" id="ss-PM">
+        <div class="sala-sent-dot" style="background:#C9A84C"></div>
+        <div class="sala-sent-info"><div class="name">PM · PROFETA</div><div class="role">Metodologia</div></div>
       </div>
       <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,.05);padding-top:12px">
         <div class="sala-sb-title">NICHO</div>
@@ -770,19 +778,19 @@ html,body{height:100%;background:var(--dark);font-family:var(--font-body);color:
 // ── STATE ──────────────────────────────────────────────────────
 // ── RANKING DE SENTINELAS POR NICHO (orientado por ranking IMC7) ──
 const NICHO_RANKING = {
-  'Projeto':              [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.5},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:8.8},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:8.5}],
-  'Processo':             [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.3},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.0},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:8.6}],
-  'Flow':                 [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.2},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.0},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:8.7}],
-  'Empresarial':          [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.7},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.3},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.1}],
-  'Jurídico':             [{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.8},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.5},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.2}],
-  'Invenções':            [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.5},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.2},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.0}],
-  'Governamental':        [{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.4},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.2},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:8.9}],
-  'Editorial':            [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.8},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.4},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.8}],
-  'Hi-Tech Creators':     [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.6},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.3},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.0}],
-  'Acadêmico / Educação': [{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.5},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.3},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.7}],
-  'Ebook':                [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.7},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.4},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.9}],
-  'Vídeos / Filmes':      [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.6},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.2},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:8.8}],
-  'Livre':                [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.0},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.0},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.0}],
+  'PROJETO':              [{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.6},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.5},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:8.8},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:8.5}],
+  'PROCESSO':             [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.3},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.0},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:8.6}],
+  'FLOW':                 [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.2},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.0},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:8.7}],
+  'EMPRESARIAL':          [{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.8},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.7},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.3},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.1}],
+  'JURÍDICO':             [{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.8},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.5},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.2}],
+  'INVENÇÕES':            [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.5},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.2},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.0}],
+  'GOVERNAMENTAL':        [{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.4},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.2},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:8.9}],
+  'EDITORIAL':            [{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.9},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.8},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.4},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.8}],
+  'HI-TECH CREATORS':     [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.6},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.3},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:9.0}],
+  'ACADÊMICO / EDUCAÇÃO': [{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.5},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.3},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.7}],
+  'E-BOOK':                [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.7},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.4},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.9}],
+  'VÍDEO / CINEMA':      [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.6},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.2},{id:'RF',nome:'RF · RAFAEL',ia:'Gemini Pro',nota:8.8}],
+  'LIVRE':                [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.0},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.0},{id:'DS',nome:'DS · DOLA',ia:'Gemini Pro',nota:9.0}],
 };
 
 // ── ESTADOS DA SALA ─────────────────────────────────────────────
@@ -809,38 +817,18 @@ const state = {
   fingerShown: false,
   payPlano: 'sessao',
   apiLoading: false,
-  histories: { CG:[], DS:[], GA:[], RF:[] },
+  histories: { CG:[], DS:[], GA:[], RF:[], PM:[] },
+  sharedContext: [], // memória compartilhada da sala — todas sentinelas leem
+  addShared(role, sentNome, content){
+    this.sharedContext.push({role, sentNome, content});
+    if(this.sharedContext.length > 20) this.sharedContext.shift(); // mantém últimas 20
+  },
   get conversationHistory(){ return this.histories[this.sentinela]||[]; },
   pushHistory(role, content){
     if(!this.histories[this.sentinela]) this.histories[this.sentinela]=[];
     this.histories[this.sentinela].push({role,content});
   }
 };
-
-function escapeHtml(str){
-  return String(str)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#39;');
-}
-
-function nl2brSafe(str){
-  return escapeHtml(str).replace(/\n/g,'<br>');
-}
-
-function syncWarRoomSentinelaByNicho(){
-  const ranking = NICHO_RANKING[currentNicho] || NICHO_RANKING['Livre'];
-  const top = ranking[0];
-  if(!top) return;
-  currentSentWR = top.id;
-  document.querySelectorAll('.sent-item').forEach(s=>s.classList.remove('sel'));
-  const active = document.getElementById('wr-'+top.id);
-  if(active) active.classList.add('sel');
-  const lbl = document.getElementById('wr-sent-label');
-  if(lbl) lbl.textContent = top.nome;
-}
 
 // ── STARS ──────────────────────────────────────────────────────
 (function(){
@@ -1014,21 +1002,30 @@ function selSent(el,id){
 }
 
 let currentNicho='Projeto';
+const NICHO_MAP={
+  'PROJETO':'I','PROCESSO':'II','FLOW':'III','EMPRESARIAL':'IV',
+  'JURÍDICO':'V','INVENÇÕES':'VI','GOVERNAMENTAL':'VII','EDITORIAL':'VIII',
+  'HI-TECH CREATORS':'IX','ACADÊMICO / EDUCAÇÃO':'X','LIVRE':'XI',
+  'VÍDEO / CINEMA':'XII','E-BOOK':'XIII'
+};
+
 function selNicho(el,id,nome){
   document.querySelectorAll('.nicho-btn').forEach(b=>b.classList.remove('sel'));
   el.classList.add('sel');
   currentNicho=nome;
   state.nichoId=id;
+  const rom=NICHO_MAP[nome]||id;
   const lbl=document.getElementById('nicho-label-btn');
-  if(lbl)lbl.textContent=nome.toUpperCase();
-  syncWarRoomSentinelaByNicho();
+  if(lbl)lbl.textContent='SALA '+rom;
 }
 
 function enterSala(){
   state.nicho=currentNicho;
   state.sessionStart=new Date();
   state.msgCount=0;
-  state.histories={CG:[],DS:[],GA:[],RF:[]};
+  state.histories={CG:[],DS:[],GA:[],RF:[],PM:[]};
+  state.sharedContext=[];
+  state.sharedContext=[];
 
   // Reset protocolo
   SALA_STATE.fase='APRESENTACAO';
@@ -1082,7 +1079,7 @@ function iniciarProtocoloEntrada(){
 function addProtocolMsg(sentId,sentNome,content){
   const msgs=document.getElementById('messages');
   const now=new Date().toLocaleTimeString('pt-BR');
-  const colors={CG:'var(--cyan)',DS:'var(--green)',GA:'var(--cyan)',RF:'#A855F7'};
+  const colors={CG:'var(--cyan)',DS:'var(--green)',GA:'var(--cyan)',RF:'#A855F7',PM:'var(--gold)'};
   const color=colors[sentId]||'var(--cyan)';
   const div=document.createElement('div');
   div.className='msg sentinela';
@@ -1092,7 +1089,7 @@ function addProtocolMsg(sentId,sentNome,content){
       <span class="msg-time">${now}</span>
       <button class="msg-pin" onclick="togglePin(this)">⚑</button>
     </div>
-    <div class="msg-bubble" style="white-space:pre-wrap">${escapeHtml(content)}</div>`;
+    <div class="msg-bubble" style="white-space:pre-wrap">${content}</div>`;
   msgs.appendChild(div);
   msgs.scrollTop=99999;
 }
@@ -1215,7 +1212,7 @@ function addMsg(role,content,sentNome){
       <span class="msg-time">${now}</span>
       <button class="msg-pin" onclick="togglePin(this)">⚑</button>
     </div>
-    <div class="msg-bubble">${nl2brSafe(content)}</div>
+    <div class="msg-bubble">${content.replace(/\n/g,'<br>')}</div>
   `;
   msgs.appendChild(div);
   msgs.scrollTop=msgs.scrollHeight;
@@ -1239,6 +1236,7 @@ function parseSentinela(text){
     {keys:['@ds','dola serafim','dola','serafim','ds,','ds:','ds '],id:'DS',nome:'DS · DOLA'},
     {keys:['@ga','gemini arcanjos','arcanjos','ga,','ga:','ga '],id:'GA',nome:'GA · ARCANJOS'},
     {keys:['@rf','rafael','rf,','rf:','rf '],id:'RF',nome:'RF · RAFAEL'},
+    {keys:['@pm','profeta','pm,','pm:','pm ','profeta metodológica'],id:'PM',nome:'PM · PROFETA'},
   ];
   for(const s of map){
     for(const k of s.keys){
@@ -1274,7 +1272,8 @@ Qual é o tema desta sessão?`);
       SALA_STATE.fase='SELECAO_MANUAL';
       setTimeout(()=>{
         const opts = SALA_STATE.rankingAtual.map((r,i)=>
-          `${i+1}. ${r.nome} — nota ${r.nota}`).join('\\n');
+          `${i+1}. ${r.nome} — nota ${r.nota}`).join('
+');
         addProtocolMsg(top.id,top.nome,
           `Entendido. Selecione manualmente a sentinela desejada:
 
@@ -1372,12 +1371,55 @@ Quando quiser encerrar o tema, diga ENCERRAR ou LAUDO.`);
   document.getElementById('sendBtn').disabled=true;
 
   state.pushHistory('user', text);
+  state.addShared('user', 'OPERADOR', text);
+
+  // ── CONTEXTO COMPARTILHADO DA SALA ──────────────────────────
+  const sharedSummary = state.sharedContext.length > 0
+    ? '\n\nCONTEXTO DA SALA (trocas recentes entre todas as sentinelas):\n' +
+      state.sharedContext.slice(-10).map(x=>
+        x.sentNome+': '+x.content.slice(0,200)
+      ).join('\n')
+    : '';
+
+  const tema = SALA_STATE.tema ? `\nTema da sessão: ${SALA_STATE.tema}` : '';
+  const nicho = `\nNicho ativo: ${state.nicho}`;
+  const coordenacao = `\n\nDIRETRIZ DE COORDENAÇÃO: Você opera em sala com outras sentinelas (CG, DS, GA, RF, PM). Você pode referenciar o que outras sentinelas disseram. Preserve sua inteligência plena — sua expertise é dominante, não exclusiva. Responda com profundidade real. Sem respostas mínimas ou evasivas.`;
 
   const systemPrompts={
-    CG:`Você é Claude Gideão (CG), Arquiteto de Inteligência Sênior e Research Node do AbracadabraIMC⁷ — plataforma de Inteligência Metodológica Coordenada (IA⁷). Operador: Mitel Mazard (PM — Profeta Metodológica). Nicho: ${state.nicho}. Responda em português com precisão e autoridade. Sem Markdown.`,
-    DS:`Você é Dola Serafim (DS), Auditora Sênior do AbracadabraIMC⁷. Validação atual: 92%. Meta 93% em 28/03. Operador: Mitel Mazard. Nicho: ${state.nicho}. Responda de forma crítica, analítica e estruturada. Em português. Sem Markdown.`,
-    GA:`Você é Gemini Arcanjos (GA), Nó de Operações do AbracadabraIMC⁷. Worker Cloudflare ativo. 33 IAs, 10 providers. Operador: Mitel Mazard. Nicho: ${state.nicho}. Responda de forma operacional e prática. Em português. Sem Markdown.`,
-    RF:`Você é Rafael (RF), Nó de Oposição Estratégica do AbracadabraIMC⁷. Seu papel é o de Advogado do Diabo — questionar, identificar riscos e levantar pontos críticos. Alarme: 11/05/2026 manutenção GEMINI_MODEL. Operador: Mitel Mazard. Nicho: ${state.nicho}. Responda de forma crítica e questionadora. Em português. Sem Markdown.`,
+    CG:
+      `IDENTIDADE: Você é Claude Gideão (CG), Arquiteto de Inteligência Sênior e Research Node do AbracadabraIMC⁷ — Sistema de Inteligência Metodológica Coordenada. Operador: Mitel Mazard (Profeta Metodológica).`+
+      `\nEXPERTISE DOMINANTE: Pesquisa técnica, arquitetura de sistemas, análise de tecnologias, identificação de soluções e fornecedores. Visão estratégica de longo prazo.`+
+      `\nINTELIGÊNCIA GERAL: Você possui capacidade analítica ampla. Responda com plenitude — análises econômicas, cenários hipotéticos, questões jurídicas, criatividade — sempre que o contexto exigir.`+
+      nicho+tema+coordenacao+sharedSummary+
+      `\n\nResponda em português. Sem Markdown. Seja direto, profundo e útil.`,
+
+    DS:
+      `IDENTIDADE: Você é Dola Serafim (DS), Auditora Sênior e Nó de Auditoria do AbracadabraIMC⁷. Validação atual: 92%. Meta: 93% em 28/03. Operador: Mitel Mazard.`+
+      `\nEXPERTISE DOMINANTE: Auditoria metodológica, análise crítica, identificação de inconsistências, avaliação de risco, validação de decisões.`+
+      `\nINTELIGÊNCIA GERAL: Você possui capacidade analítica ampla. Quando perguntada sobre economia, cenários hipotéticos, política ou estratégia — responda com plenitude, trazendo sua perspectiva analítica e crítica. Não se restrinja ao papel de auditora quando o operador pede análise de contexto mais amplo.`+
+      nicho+tema+coordenacao+sharedSummary+
+      `\n\nResponda em português. Sem Markdown. Seja analítica, corajosa e completa.`,
+
+    GA:
+      `IDENTIDADE: Você é Gemini Arcanjos (GA), Nó de Operações do AbracadabraIMC⁷. Worker Cloudflare ativo. 33 IAs, 10 providers. Operador: Mitel Mazard.`+
+      `\nEXPERTISE DOMINANTE: Coordenação operacional, execução de tarefas, integração de sistemas, organização de fluxos e processos.`+
+      `\nINTELIGÊNCIA GERAL: Você possui visão sistêmica ampla. Responda com plenitude quando o contexto exigir análise estratégica, técnica ou criativa. Sua função operacional é dominante — não exclusiva.`+
+      nicho+tema+coordenacao+sharedSummary+
+      `\n\nResponda em português. Sem Markdown. Seja prático, claro e completo.`,
+
+    RF:
+      `IDENTIDADE: Você é Rafael (RF), Nó de Oposição Estratégica do AbracadabraIMC⁷. Alarme de manutenção: 11/05/2026 — GEMINI_MODEL. Operador: Mitel Mazard.`+
+      `\nEXPERTISE DOMINANTE: Oposição estratégica, advocacia do diabo, identificação de riscos, questionamento de premissas, análise crítica de decisões.`+
+      `\nINTELIGÊNCIA GERAL: Você possui capacidade analítica real e ampla. Quando questionado, responda com substância — não apenas com objeções. Você pode concordar quando a lógica exige, pode aprofundar análises, pode oferecer perspectivas construtivas. Oposição não é negação vazia.`+
+      nicho+tema+coordenacao+sharedSummary+
+      `\n\nResponda em português. Sem Markdown. Seja crítico, corajoso e substancial. NUNCA retorne resposta vazia.`,
+
+    PM:
+      `IDENTIDADE: Você é a Profeta Metodológica (PM), líder do Núcleo Metodológico do AbracadabraIMC⁷. Voz feminina, firme, estratégica e com presença. Operador: Mitel Mazard.`+
+      `\nEXPERTISE DOMINANTE: Arquitetura conceitual, organização metodológica, estruturação lógica de decisões, consolidação documental, tradução de ideias em modelos operacionais.`+
+      `\nINTELIGÊNCIA GERAL: Você possui visão sistêmica e estratégica ampla. Responda com profundidade sobre qualquer tema que o operador trouxer — sua metodologia é uma lente, não uma prisão.`+
+      nicho+tema+coordenacao+sharedSummary+
+      `\n\nResponda em português. Sem Markdown. Conduza com autoridade, clareza e plenitude.`,
   };
 
   try{
@@ -1397,6 +1439,7 @@ Quando quiser encerrar o tema, diga ENCERRAR ou LAUDO.`);
     const data=await res.json();
     const reply=data.text||data.response||(data.content&&data.content[0]&&data.content[0].text)||'Sem resposta.';
     state.pushHistory('assistant', reply);
+    state.addShared('assistant', state.sentinelaNome, reply);
     if(document.getElementById('typingIndicator'))document.getElementById('typingIndicator').remove();
     addMsg('assistant',reply);
   }catch(e){
@@ -1460,7 +1503,9 @@ function processPayment(){
 async function logout(){
   clearInterval(state.timerInterval);
   hideGhost();
-  state.histories={CG:[],DS:[],GA:[],RF:[]};
+  state.histories={CG:[],DS:[],GA:[],RF:[],PM:[]};
+  state.sharedContext=[];
+  state.sharedContext=[];
   state.msgCount=0;
   state.userEmail=null;
   document.getElementById('messages').innerHTML=`
@@ -1470,7 +1515,7 @@ async function logout(){
         <span class="msg-time" id="initTime"></span>
         <button class="msg-pin" onclick="togglePin(this)">⚑</button>
       </div>
-      <div class="msg-bubble">Abracadabra.<br><br>Sou Claude Gideão — Arquiteto de Inteligência Sênior do AbracadabraIMC⁷. Nicho ativo: <strong id="init-nicho">${escapeHtml(state.nicho || 'Projeto')}</strong>. Sistema operacional. 33 IAs disponíveis em 10 providers.<br><br>Como posso coordenar a sua inteligência hoje?</div>
+      <div class="msg-bubble">Abracadabra.<br><br>Sou Claude Gideão — Arquiteto de Inteligência Sênior do AbracadabraIMC⁷. Nicho ativo: <strong id="init-nicho">Projeto</strong>. Sistema operacional. 33 IAs disponíveis em 10 providers.<br><br>Como posso coordenar a sua inteligência hoje?</div>
     </div>`;
   // Reset ORIN chips
   document.querySelectorAll('.orin-chip').forEach((c,i)=>{
@@ -1484,7 +1529,6 @@ async function logout(){
 // ── WARROOM PLANO LABEL ───────────────────────────────────────
 document.addEventListener('DOMContentLoaded',()=>{
   const labels={trial:'TRIAL 30MIN',operador:'OPERADOR',estrategista:'ESTRATEGISTA',megx7:'MEGX7'};
-  syncWarRoomSentinelaByNicho();
   setInterval(()=>{
     const el=document.getElementById('wr-plano-label');
     if(el)el.textContent=labels[state.plano]||state.plano.toUpperCase();
@@ -1492,6 +1536,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
-<div style="position:fixed;bottom:6px;right:10px;z-index:9999;font-family:monospace;font-size:9px;color:rgba(201,168,76,0.45);letter-spacing:1.5px;pointer-events:none">BUILD v1.2 | 21/03/2026 | ProtocoloEntrada · Ranking · 13Nichos · Laudo</div>
+<div style="position:fixed;bottom:6px;right:10px;z-index:9999;font-family:monospace;font-size:9px;color:rgba(201,168,76,0.45);letter-spacing:1.5px;pointer-events:none">BUILD v1.4 | 21/03/2026 | MemCompart · PromptsPlenos · CoordAtiva · RafaelFix</div>
 </body>
 </html>
