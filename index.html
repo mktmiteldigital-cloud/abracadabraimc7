@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AbracadabraIMC⁷ · Portal · v0.9</title>
+<title>AbracadabraIMC⁷ · Portal · v1.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- Firebase via REST API — sem SDK externo -->
 <style>
@@ -781,7 +781,13 @@ const state = {
   fingerShown: false,
   payPlano: 'sessao',
   apiLoading: false,
-  conversationHistory: []
+  // Histórico separado por sentinela
+  histories: { CG:[], DS:[], GA:[], RF:[] },
+  get conversationHistory(){ return this.histories[this.sentinela]||[]; },
+  pushHistory(role, content){ 
+    if(!this.histories[this.sentinela]) this.histories[this.sentinela]=[];
+    this.histories[this.sentinela].push({role,content});
+  }
 };
 
 // ── STARS ──────────────────────────────────────────────────────
@@ -972,7 +978,7 @@ function enterSala(){
   state.sentinelaNome=names[currentSentWR]||currentSentWR;
   state.sessionStart=new Date();
   state.msgCount=0;
-  state.conversationHistory=[];
+  state.histories={CG:[],DS:[],GA:[],RF:[]};
 
   // Update sala labels
   document.getElementById('sala-nicho-label').textContent=state.nicho.toUpperCase();
@@ -1067,8 +1073,17 @@ function endSession(){
 function changeSent(el,id,nome){
   document.querySelectorAll('.sala-sent').forEach(s=>s.classList.remove('sel'));
   el.classList.add('sel');
-  state.sentinela=id;state.sentinelaNome=nome;
-  document.getElementById('sala-sent-label').textContent=nome;
+  if(state.sentinela !== id){
+    state.sentinela=id;
+    state.sentinelaNome=nome;
+    document.getElementById('sala-sent-label').textContent=nome;
+    // Separador visual no chat
+    const notice=document.createElement('div');
+    notice.style.cssText='text-align:center;font-size:9px;color:rgba(201,168,76,.6);font-family:monospace;letter-spacing:2px;padding:6px 0;border-top:1px solid rgba(201,168,76,.1);margin:4px 0;';
+    notice.textContent='⇌ SENTINELA ATIVA: '+nome;
+    document.getElementById('messages').appendChild(notice);
+    document.getElementById('messages').scrollTop=99999;
+  }
 }
 
 function addMsg(role,content,sentNome){
@@ -1100,12 +1115,37 @@ function addMsg(role,content,sentNome){
   });
 }
 
+// ── PARSER DE INVOCAÇÃO DE SENTINELA ─────────────────────────
+function parseSentinela(text){
+  const t=text.toLowerCase();
+  const map=[
+    {keys:['@cg','claude gideão','gideão','gideao','cg,','cg:','cg '],id:'CG',nome:'CG · GIDEÃO'},
+    {keys:['@ds','dola serafim','dola','serafim','ds,','ds:','ds '],id:'DS',nome:'DS · DOLA'},
+    {keys:['@ga','gemini arcanjos','arcanjos','ga,','ga:','ga '],id:'GA',nome:'GA · ARCANJOS'},
+    {keys:['@rf','rafael','rf,','rf:','rf '],id:'RF',nome:'RF · RAFAEL'},
+  ];
+  for(const s of map){
+    for(const k of s.keys){
+      if(t.includes(k)){return s;}
+    }
+  }
+  return null;
+}
+
 async function sendMsg(){
   if(state.apiLoading)return;
   const input=document.getElementById('chatInput');
   const text=input.value.trim();
   if(!text)return;
   input.value='';
+
+  // Auto-detecta troca de sentinela na mensagem
+  const detected=parseSentinela(text);
+  if(detected && detected.id !== state.sentinela){
+    const el=document.getElementById('ss-'+detected.id);
+    if(el) changeSent(el, detected.id, detected.nome);
+  }
+
   addMsg('user',text);
 
   // typing indicator
@@ -1119,7 +1159,7 @@ async function sendMsg(){
   state.apiLoading=true;
   document.getElementById('sendBtn').disabled=true;
 
-  state.conversationHistory.push({role:'user',content:text});
+  state.pushHistory('user', text);
 
   const systemPrompts={
     CG:`Você é Claude Gideão (CG), Arquiteto de Inteligência Sênior e Research Node do AbracadabraIMC⁷ — plataforma de Inteligência Metodológica Coordenada (IA⁷). Operador: Mitel Mazard (PM — Profeta Metodológica). Nicho: ${state.nicho}. Responda em português com precisão e autoridade. Sem Markdown.`,
@@ -1139,12 +1179,12 @@ async function sendMsg(){
         sentinela: activeSent,
         nicho: state.nicho || 'Projeto',
         system: activeSystem,
-        messages: state.conversationHistory
+        messages: state.histories[activeSent]||[]
       })
     });
     const data=await res.json();
     const reply=data.text||data.response||(data.content&&data.content[0]&&data.content[0].text)||'Sem resposta.';
-    state.conversationHistory.push({role:'assistant',content:reply});
+    state.pushHistory('assistant', reply);
     if(document.getElementById('typingIndicator'))document.getElementById('typingIndicator').remove();
     addMsg('assistant',reply);
   }catch(e){
@@ -1208,7 +1248,7 @@ function processPayment(){
 async function logout(){
   clearInterval(state.timerInterval);
   hideGhost();
-  state.conversationHistory=[];
+  state.histories={CG:[],DS:[],GA:[],RF:[]};
   state.msgCount=0;
   state.userEmail=null;
   document.getElementById('messages').innerHTML=`
@@ -1239,6 +1279,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
-<div style="position:fixed;bottom:6px;right:10px;z-index:9999;font-family:monospace;font-size:9px;color:rgba(201,168,76,0.45);letter-spacing:1.5px;pointer-events:none">BUILD v0.9 | 20/03/2026 | NavFix · MobileFix · SentFix</div>
+<div style="position:fixed;bottom:6px;right:10px;z-index:9999;font-family:monospace;font-size:9px;color:rgba(201,168,76,0.45);letter-spacing:1.5px;pointer-events:none">BUILD v1.1 | 20/03/2026 | HistSep · MultiAgentReal · Parser</div>
 </body>
 </html>
