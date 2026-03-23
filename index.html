@@ -1272,8 +1272,7 @@ Qual é o tema desta sessão?`);
       SALA_STATE.fase='SELECAO_MANUAL';
       setTimeout(()=>{
         const opts = SALA_STATE.rankingAtual.map((r,i)=>
-          `${i+1}. ${r.nome} — nota ${r.nota}`).join('
-');
+          `${i+1}. ${r.nome} — nota ${r.nota}`).join('\n');
         addProtocolMsg(top.id,top.nome,
           `Entendido. Selecione manualmente a sentinela desejada:
 
