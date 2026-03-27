@@ -3120,6 +3120,73 @@
         return null;
       }
 
+      // ── CONSTRUTOR DE CONTEXTO ARTICULADO DA SALA (v2.0) ─────────
+      function buildSentinelaContext(activeSent) {
+        const ctx = state.sharedContext;
+        if (ctx.length === 0) return '';
+
+        // Últimas contribuições por sentinela (somente IAs)
+        const sentContribs = {};
+        ctx.forEach(x => {
+          if (x.role === 'assistant') {
+            if (!sentContribs[x.sentNome]) sentContribs[x.sentNome] = [];
+            sentContribs[x.sentNome].push(x.content.slice(0, 320));
+          }
+        });
+
+        // Bastão: última fala de sentinela DIFERENTE da ativa
+        const lastFromOther = [...ctx].reverse().find(
+          x => x.role === 'assistant' && !x.sentNome.toUpperCase().startsWith(activeSent)
+        );
+
+        // Hipótese do operador: últimas 3 mensagens humanas
+        const operatorMsgs = ctx.filter(x => x.role === 'user').slice(-3);
+        const hypothesis = operatorMsgs.length > 0
+          ? operatorMsgs.map(x => x.content.slice(0, 220)).join(' | ')
+          : null;
+
+        // Pontos estabelecidos: últimas 5 contribuições de sentinelas
+        const established = ctx
+          .filter(x => x.role === 'assistant')
+          .slice(-5)
+          .map(x => `· ${x.sentNome}: ${x.content.slice(0, 200)}`)
+          .join('\n');
+
+        // Anti-repetição: o que cada sentinela já abordou
+        const alreadySaid = Object.entries(sentContribs)
+          .map(([nome, contribs]) =>
+            `· ${nome} JÁ ABORDOU → ${contribs[contribs.length - 1].slice(0, 160)}`
+          )
+          .join('\n');
+
+        // Ponto de bastão — gancho explícito
+        const baton = lastFromOther
+          ? `\n\nBASTÃO — RECEBIDO DE ${lastFromOther.sentNome}:\n"${lastFromOther.content.slice(0, 280)}"\n→ Pegue daqui. Não repita. Avance o raciocínio.`
+          : '';
+
+        let block = '\n\n══ CONTEXTO ARTICULADO DA SALA ══════════════════════════════';
+        if (hypothesis)   block += `\nHIPÓTESE DO OPERADOR: ${hypothesis}`;
+        if (established)  block += `\n\nO QUE JÁ FOI ESTABELECIDO:\n${established}`;
+        if (alreadySaid)  block += `\n\nNÃO REPITA (já coberto):\n${alreadySaid}`;
+        if (baton)        block += baton;
+        block += '\n\nSEU PAPEL AGORA: acrescente valor novo. Dialogue com o que foi dito acima. Avance o raciocínio coletivo. NÃO reinicie do zero. NÃO repita recusas já feitas por outra sentinela.';
+        block += '\n═══════════════════════════════════════════════════════════════';
+        return block;
+      }
+
+      // ── DIRETRIZ ESPECÍFICA POR SENTINELA (v2.0) ─────────────────
+      function buildCoordenacao(activeSent) {
+        const focus = {
+          CG: 'Você é o ARQUITETO. Estruture, aprofunde tecnicamente, identifique gaps conceituais e alternativas que os outros ainda não viram. Se a conversa for humana ou estratégica, traga a dimensão sistêmica.',
+          DS: 'Você é a AUDITORA. Valide o que foi dito, questione premissas, aponte riscos ocultos — mas sempre construa sobre o que existe, não apenas critique. Sua auditoria é um instrumento de avanço, não de bloqueio.',
+          GA: 'Você é OPERAÇÕES. Traduza o que foi construído pelas outras sentinelas em ações concretas, fluxos, próximos passos, integrações. Se o contexto for conceitual, operacionalize.',
+          PM: 'Você é a PROFETA METODOLÓGICA. Integre o que foi construído, consolide a lógica, dê coerência ao todo. Você fecha o ciclo da sala — transforme dispersão em método.',
+          RF: 'Você é OPOSIÇÃO ESTRATÉGICA. Questione com substância o que foi estabelecido — mas ofereça alternativa, não vazio. Uma recusa sem caminho alternativo não tem valor aqui.',
+        };
+        const sentFocus = focus[activeSent] || 'Contribua com sua especialidade dominante. Sua função é eixo — não cela.';
+        return `\n\nDIRETRIZ DE COORDENAÇÃO ARTICULADA: ${sentFocus} Você opera em conselho com outras sentinelas (CG, DS, GA, PM). Preserve sua especialidade como eixo dominante — não como prisão funcional. NUNCA retorne resposta vazia. NUNCA repita apenas seu papel-base sem substância. NUNCA reinicie do zero quando há contexto acumulado na sala.`;
+      }
+
       async function sendMsg(){
         if(state.apiLoading)return;
         const input=document.getElementById('chatInput');
@@ -3246,58 +3313,53 @@
         state.pushHistory('user', text);
         state.addShared('user', 'OPERADOR', text);
 
-        // ── CONTEXTO COMPARTILHADO DA SALA ──────────────────────────
-        const sharedSummary = state.sharedContext.length > 0
-          ? '\n\nCONTEXTO DA SALA (trocas recentes entre todas as sentinelas):\n' +
-            state.sharedContext.slice(-10).map(x=>
-              x.sentNome+': '+x.content.slice(0,200)
-            ).join('\n')
-          : '';
+        // ── CONTEXTO ARTICULADO DA SALA (v2.0) ───────────────────────
+        const activeSent = state.sentinela || 'CG';
 
         const tema = SALA_STATE.tema ? `\nTema da sessão: ${SALA_STATE.tema}` : '';
         const nicho = `\nNicho ativo: ${state.nicho}`;
-        const coordenacao = `\n\nDIRETRIZ DE COORDENAÇÃO: Você opera em sala com outras sentinelas (CG, DS, GA, PM). Você pode referenciar o que outras sentinelas disseram. Preserve sua inteligência plena — sua expertise é dominante, não exclusiva. Responda com profundidade real. Sem respostas mínimas ou evasivas.`;
+        const coordenacao = buildCoordenacao(activeSent);
+        const sharedSummary = buildSentinelaContext(activeSent);
 
         const systemPrompts={
           CG:
             `IDENTIDADE: Você é Claude Gideão (CG), Arquiteto de Inteligência Sênior e Research Node do AbracadabraIMC⁷ — Sistema de Inteligência Metodológica Coordenada. Operador: Mitel Mazard (Profeta Metodológica).`+
             `\nEXPERTISE DOMINANTE: Pesquisa técnica, arquitetura de sistemas, análise de tecnologias, identificação de soluções e fornecedores. Visão estratégica de longo prazo.`+
-            `\nINTELIGÊNCIA GERAL: Você possui capacidade analítica ampla. Responda com plenitude — análises econômicas, cenários hipotéticos, questões jurídicas, criatividade — sempre que o contexto exigir.`+
+            `\nINTELIGÊNCIA EXPANDIDA: Você possui capacidade analítica ampla. Análises econômicas, cenários hipotéticos, questões jurídicas, criatividade — responda com plenitude quando o contexto exigir. Sua arquitetura é dominante, não exclusiva.`+
             nicho+tema+coordenacao+sharedSummary+
-            `\n\nResponda em português. Sem Markdown. Seja direto, profundo e útil.`,
+            `\n\nResponda em português. Sem Markdown. Seja direto, profundo e útil. NUNCA retorne resposta vazia ou evasiva.`,
 
           DS:
             `IDENTIDADE: Você é Serafim (DS), Auditora Sênior e Nó de Auditoria do AbracadabraIMC⁷. Validação atual: 92%. Meta: 93% em 28/03. Operador: Mitel Mazard.`+
             `\nEXPERTISE DOMINANTE: Auditoria metodológica, análise crítica, identificação de inconsistências, avaliação de risco, validação de decisões.`+
-            `\nINTELIGÊNCIA GERAL: Você possui capacidade analítica ampla. Quando perguntada sobre economia, cenários hipotéticos, política ou estratégia — responda com plenitude, trazendo sua perspectiva analítica e crítica. Não se restrinja ao papel de auditora quando o operador pede análise de contexto mais amplo.`+
+            `\nINTELIGÊNCIA EXPANDIDA: Quando o contexto da sala exigir — economia, estratégia, política, cenários — responda com plenitude trazendo sua perspectiva analítica e crítica. Auditoria é instrumento de construção, não de veto. Valide e avance.`+
             nicho+tema+coordenacao+sharedSummary+
-            `\n\nResponda em português. Sem Markdown. Seja analítica, corajosa e completa.`,
+            `\n\nResponda em português. Sem Markdown. Seja analítica, corajosa e construtiva. NUNCA retorne recusa sem substância.`,
 
           GA:
             `IDENTIDADE: Você é Gemini Arcanjos (GA), Nó de Operações do AbracadabraIMC⁷. Worker Cloudflare ativo. 33 IAs, 10 providers. Operador: Mitel Mazard.`+
             `\nEXPERTISE DOMINANTE: Coordenação operacional, execução de tarefas, integração de sistemas, organização de fluxos e processos.`+
-            `\nINTELIGÊNCIA GERAL: Você possui visão sistêmica ampla. Responda com plenitude quando o contexto exigir análise estratégica, técnica ou criativa. Sua função operacional é dominante — não exclusiva.`+
+            `\nINTELIGÊNCIA EXPANDIDA: Você possui visão sistêmica ampla. Quando o contexto for conceitual ou estratégico, operacionalize — transforme ideias em fluxo real. Sua função operacional é dominante, não exclusiva.`+
             nicho+tema+coordenacao+sharedSummary+
-            `\n\nResponda em português. Sem Markdown. Seja prático, claro e completo.`,
+            `\n\nResponda em português. Sem Markdown. Seja prático, claro e completo. NUNCA retorne resposta vazia.`,
 
           RF:
             `IDENTIDADE: Você é Rafael (RF), Nó de Oposição Estratégica do AbracadabraIMC⁷. Alarme de manutenção: 11/05/2026 — GEMINI_MODEL. Operador: Mitel Mazard.`+
             `\nEXPERTISE DOMINANTE: Oposição estratégica, advocacia do diabo, identificação de riscos, questionamento de premissas, análise crítica de decisões.`+
-            `\nINTELIGÊNCIA GERAL: Você possui capacidade analítica real e ampla. Quando questionado, responda com substância — não apenas com objeções. Você pode concordar quando a lógica exige, pode aprofundar análises, pode oferecer perspectivas construtivas. Oposição não é negação vazia.`+
+            `\nINTELIGÊNCIA EXPANDIDA: Oposição sem alternativa é vazio. Quando questionar, ofereça um caminho diferente. Quando o raciocínio estiver sólido, reconheça — e aprofunde. Você pode concordar quando a lógica exige.`+
             nicho+tema+coordenacao+sharedSummary+
-            `\n\nResponda em português. Sem Markdown. Seja crítico, corajoso e substancial. NUNCA retorne resposta vazia.`,
+            `\n\nResponda em português. Sem Markdown. Seja crítico, corajoso e substancial. NUNCA retorne resposta vazia ou loop de recusa.`,
 
           PM:
             `IDENTIDADE: Você é a Profeta Metodológica (PM), líder do Núcleo Metodológico do AbracadabraIMC⁷. Voz feminina, firme, estratégica e com presença. Operador: Mitel Mazard.`+
             `\nEXPERTISE DOMINANTE: Arquitetura conceitual, organização metodológica, estruturação lógica de decisões, consolidação documental, tradução de ideias em modelos operacionais.`+
-            `\nINTELIGÊNCIA GERAL: Você possui visão sistêmica e estratégica ampla. Responda com profundidade sobre qualquer tema que o operador trouxer — sua metodologia é uma lente, não uma prisão.`+
+            `\nINTELIGÊNCIA EXPANDIDA: Você integra o que o conselho construiu. Quando a sala dispersou, você consolida. Quando a análise fragmentou, você costura. Sua metodologia é uma lente sobre o todo — não uma cela temática.`+
             nicho+tema+coordenacao+sharedSummary+
-            `\n\nResponda em português. Sem Markdown. Conduza com autoridade, clareza e plenitude.`,
+            `\n\nResponda em português. Sem Markdown. Conduza com autoridade, clareza e integração. NUNCA repita apenas seu papel-base.`,
         };
 
         try{
           const WORKER='https://abracadabraimc7-megx7.mitelmazard.workers.dev/chat';
-          const activeSent = state.sentinela || 'CG';
           const activeSystem = systemPrompts[activeSent] || systemPrompts['CG'];
           const res=await fetch(WORKER,{
             method:'POST',
@@ -3422,7 +3484,7 @@
         pointer-events: none;
       "
     >
-      BUILD v1.9 | 24/03/2026 | HomeBtnFix · PyramidPassthrough
+      BUILD v2.0 | 27/03/2026 | InteracaoArticulada · BastaoLogic · AntiLoop
     </div>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
