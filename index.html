@@ -237,28 +237,33 @@
         color: var(--gold);
         letter-spacing: 4px;
         animation: glow 3s ease-in-out infinite;
+        text-shadow: 0 0 28px rgba(5, 8, 16, 0.75);
       }
       .portal-sub {
         font-size: 11px;
         color: var(--cyan);
         letter-spacing: 5px;
+        text-shadow: 0 0 18px rgba(5, 8, 16, 0.8);
       }
       .portal-tagline {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.35);
+        color: rgba(255, 255, 255, 0.52);
         letter-spacing: 2px;
+        text-shadow: 0 0 18px rgba(5, 8, 16, 0.8);
       }
       .portal-principle {
         font-size: 12px;
-        color: rgba(201, 168, 76, 0.6);
+        color: rgba(201, 168, 76, 0.78);
         letter-spacing: 1px;
         border: 1px solid var(--border);
         padding: 8px 20px;
         font-family: var(--font-title);
         font-style: italic;
+        background: rgba(5, 8, 16, 0.28);
+        text-shadow: 0 0 14px rgba(5, 8, 16, 0.85);
       }
       .portal-btn {
-        background: transparent;
+        background: rgba(5, 8, 16, 0.38);
         border: 1px solid var(--gold);
         color: var(--gold);
         font-family: var(--font-title);
@@ -270,6 +275,8 @@
         margin-top: 4px;
         position: relative;
         z-index: 3;
+        text-shadow: 0 0 12px rgba(5, 8, 16, 0.85);
+        box-shadow: 0 0 0 1px rgba(5, 8, 16, 0.3), 0 0 26px rgba(5, 8, 16, 0.24);
       }
       .portal-btn:hover {
         background: var(--gold-dim);
@@ -3139,8 +3146,7 @@
             SALA_STATE.fase='SELECAO_MANUAL';
             setTimeout(()=>{
               const opts = SALA_STATE.rankingAtual.map((r,i)=>
-                `${i+1}. ${r.nome} — nota ${r.nota}`).join('
-      ');
+                `${i+1}. ${r.nome} — nota ${r.nota}`).join('\n');
               addProtocolMsg(top.id,top.nome,
                 `Entendido. Selecione manualmente a sentinela desejada:
 
@@ -3418,5 +3424,6 @@
     >
       BUILD v1.9 | 24/03/2026 | HomeBtnFix · PyramidPassthrough
     </div>
-  </body>
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
 </html>
