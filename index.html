@@ -1467,6 +1467,139 @@
       ::-webkit-scrollbar-thumb {
         background: rgba(201, 168, 76, 0.2);
       }
+
+      /* ════════════════════════════════
+   PAINÉIS TÉCNICOS · MEGX7 UNIDADE G
+════════════════════════════════ */
+      .sala-paineis {
+        width: 210px;
+        border-left: 1px solid var(--border);
+        background: rgba(5, 8, 16, 0.95);
+        padding: 10px 9px;
+        overflow-y: auto;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      @media (max-width: 900px) { .sala-paineis { display: none; } }
+
+      .painel-tech-hover {
+        position: relative;
+        background: rgba(10,10,10,0.6);
+        border: 1px solid var(--gold-dim);
+        padding: 9px 10px;
+        margin-bottom: 8px;
+        overflow: hidden;
+        max-height: 52px;
+        transition: max-height 0.35s ease, border-color 0.25s ease;
+        cursor: pointer;
+      }
+      .painel-tech-hover:hover,
+      .painel-tech-hover.is-open {
+        max-height: 420px;
+        border-color: var(--gold3);
+        background: rgba(13,14,22,0.95);
+      }
+      .painel-tech-titulo {
+        font-size: 8px;
+        color: var(--gold);
+        font-family: var(--font-title);
+        letter-spacing: 1px;
+        margin-bottom: 7px;
+        text-transform: uppercase;
+      }
+      .painel-tech-resumo {
+        display: flex;
+        justify-content: space-between;
+        font-size: 9px;
+        color: rgba(255,255,255,0.35);
+        letter-spacing: 0.5px;
+      }
+      .painel-tech-conteudo {
+        opacity: 0;
+        transform: translateY(6px);
+        transition: 0.3s ease;
+        margin-top: 10px;
+        border-top: 1px solid rgba(255,255,255,0.06);
+        padding-top: 10px;
+        max-height: 310px;
+        overflow-y: auto;
+        pointer-events: none;
+      }
+      .painel-tech-hover:hover .painel-tech-conteudo,
+      .painel-tech-hover.is-open .painel-tech-conteudo {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+      .pt-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 9px;
+        margin-bottom: 5px;
+        color: rgba(255,255,255,0.4);
+        letter-spacing: 0.5px;
+      }
+      .pt-val {
+        color: var(--cyan);
+        font-family: monospace;
+        font-size: 9px;
+      }
+      .badge-status {
+        padding: 1px 5px;
+        font-size: 8px;
+        font-weight: 700;
+        background: var(--gold3);
+        color: #000;
+        letter-spacing: 0.5px;
+      }
+      .pt-input {
+        width: 100%;
+        background: rgba(0,0,0,0.6);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: #eee;
+        padding: 7px 8px;
+        font-size: 9px;
+        margin-bottom: 6px;
+        font-family: var(--font-body);
+        outline: none;
+      }
+      .pt-acoes {
+        display: flex;
+        gap: 5px;
+        margin-top: 7px;
+      }
+      .pt-acoes button {
+        flex: 1;
+        min-height: 28px;
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.12);
+        color: rgba(255,255,255,0.55);
+        font-size: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+        letter-spacing: 0.5px;
+        font-family: var(--font-body);
+      }
+      .pt-acoes button:hover:not(:disabled) {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+      .pt-acoes button:disabled {
+        opacity: 0.25;
+        cursor: not-allowed;
+      }
+      #btn-moises.pt-moises-on {
+        border-color: var(--green) !important;
+        color: var(--green) !important;
+        background: rgba(0,255,100,0.04);
+      }
+      .pt-trilha-item {
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 3px 0;
+        font-size: 8px;
+      }
     </style>
   </head>
   <body>
@@ -1586,7 +1719,7 @@
             <div class="stat-label">PROVIDERS</div>
           </div>
           <div>
-            <div class="stat-val">16</div>
+            <div class="stat-val">17</div>
             <div class="stat-label">NICHOS</div>
           </div>
           <div>
@@ -2296,6 +2429,13 @@
           >
             XVI · GASTRONOMIA
           </button>
+          <button
+            class="nicho-btn"
+            onclick="selNicho(this,17,'PROGRAMAÇÃO')"
+            title="PROGRAMAÇÃO"
+          >
+            XVII · PROGRAMAÇÃO
+          </button>
         </div>
 
         <!-- Enter button -->
@@ -2483,6 +2623,78 @@
       </div>
     </div>
 
+        <!-- ── PAINÉIS TÉCNICOS MEGX7 · DIREITA ─────────────────────── -->
+        <div class="sala-paineis" id="sala-paineis">
+
+          <!-- PAINEL 1 · ORIN & VISÃO -->
+          <div class="painel-tech-hover" onclick="alternarPainelTecnico(this,event)">
+            <div class="painel-tech-titulo">P1 · ORIN & VISÃO</div>
+            <div class="painel-tech-resumo">
+              <span>ORIN: <strong id="pt-orin-resumo">--</strong></span>
+              <span id="moises-status-badge" class="badge-status" style="background:#1a1a1a;color:#555;">MOISÉS OFF</span>
+            </div>
+            <div class="painel-tech-conteudo">
+              <div class="pt-row">NICHO: <span id="pt-nicho" class="pt-val">--</span></div>
+              <div class="pt-row">TS: <span id="pt-ts" class="pt-val" style="font-size:8px;">--</span></div>
+              <div class="pt-acoes">
+                <button type="button" onclick="ptCopiarORIN()">COPIAR</button>
+                <button type="button" id="btn-moises" onclick="alternarMoises(this)">MOISÉS</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PAINEL 2 · PRERROGATIVA (visível só em PROGRAMAÇÃO) -->
+          <div class="painel-tech-hover" id="modulo-prerrogativa" style="display:none;" onclick="alternarPainelTecnico(this,event)">
+            <div class="painel-tech-titulo">P2 · PRERROGATIVA</div>
+            <div class="painel-tech-resumo">
+              <span>TIPO: <strong id="resumo-doc-tipo">MEMORIAL</strong></span>
+            </div>
+            <div class="painel-tech-conteudo">
+              <select id="doc-tipo" class="pt-input" onchange="ptAtualizarPaineis()">
+                <option value="MEMORIAL">MEMORIAL TÉCNICO</option>
+                <option value="PRE-PATENTE">MINUTA DE PRÉ-PATENTE</option>
+                <option value="EVIDENCIAS">CADERNO DE EVIDÊNCIAS</option>
+              </select>
+              <button type="button" onclick="ptAncorarDocumental(this)" style="width:100%;background:var(--gold3);color:#000;border:none;padding:8px;font-weight:bold;cursor:pointer;font-size:9px;letter-spacing:1px;">ANCORAR DADO</button>
+            </div>
+          </div>
+
+          <!-- PAINEL 3 · TRAJETÓRIA -->
+          <div class="painel-tech-hover" onclick="alternarPainelTecnico(this,event)">
+            <div class="painel-tech-titulo">P3 · TRAJETÓRIA</div>
+            <div class="painel-tech-resumo">
+              <span id="pt-traj-resumo">SESSÃO INATIVA</span>
+            </div>
+            <div class="painel-tech-conteudo">
+              <div class="pt-row">ORIGEM: <span id="pt-traj-origem" class="pt-val">--</span></div>
+              <div class="pt-row" style="flex-direction:column;gap:3px;">
+                <span style="color:rgba(255,255,255,0.25)">CAMINHO:</span>
+                <span id="pt-traj-percurso" class="pt-val" style="font-size:8px;word-break:break-all;">--</span>
+              </div>
+              <div class="pt-row">SENTINELAS: <span id="pt-traj-sents" class="pt-val" style="font-size:8px;">--</span></div>
+            </div>
+          </div>
+
+          <!-- PAINEL 4 · RED (MEMÓRIA) -->
+          <div class="painel-tech-hover" onclick="alternarPainelTecnico(this,event)">
+            <div class="painel-tech-titulo">P4 · RED · MEMÓRIA</div>
+            <div class="painel-tech-resumo">
+              <span>STATUS: <strong id="pt-red-status">OFF</strong></span>
+            </div>
+            <div class="painel-tech-conteudo">
+              <div class="pt-row">MODO: <span id="pt-red-modo" class="pt-val">--</span></div>
+              <div class="pt-row">ORIN: <span id="pt-red-orin" class="pt-val" style="font-size:8px;">--</span></div>
+              <div class="pt-row">INÍCIO: <span id="pt-red-ts" class="pt-val">--</span></div>
+              <div class="pt-acoes">
+                <button type="button" onclick="ptSolicitarRED('RAW')">GRAVAR RAW</button>
+                <button type="button" disabled>GERAR MP4</button>
+              </div>
+              <div id="pt-trilha-lista" style="margin-top:8px;font-size:8px;color:rgba(255,255,255,0.25);">SEM REGISTROS.</div>
+            </div>
+          </div>
+
+        </div><!-- /sala-paineis -->
+
     <!-- ═══════════════════════════════════
      S6 — ORIN PDF
 ═══════════════════════════════════ -->
@@ -2665,6 +2877,7 @@
         'MEDICINA':                      [{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:9.7},{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.5},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.3}],
         'PSICOLOGIA':                    [{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.8},{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:9.6},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.2},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.7}],
         'GASTRONOMIA':                   [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.5},{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.3},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.1},{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:8.8}],
+        'PROGRAMAÇÃO':                   [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.9},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.4},{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:8.9},{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:8.5}],
       };
 
       // ── ESTADOS DA SALA ─────────────────────────────────────────────
@@ -2693,6 +2906,26 @@
         apiLoading: false,
         histories: { CG:[], DS:[], GA:[], PM:[] },
         sharedContext: [], // memória compartilhada da sala — todas sentinelas leem
+        // ── MEGX7 UNIDADE G ──────────────────────────────────────────
+        get nichoAtivo(){ return this.nicho; },          // alias para compatibilidade
+        set nichoAtivo(v){ this.nicho = v; },
+        nichoOrigem: null,
+        sentinelasEnvolvidas: [],
+        mapaTrajetoria: [],
+        docsTecnicos: [],
+        orinAtivo: 'ORIN-NAO-GERADO',
+        timestampCompleto: '',
+        memoriaPorNicho: {},
+        moisesAtivo: false,
+        red: {
+          permitido: false,
+          ativo: false,
+          modo: 'OFF',
+          status: 'OFF',
+          orin: null,
+          timestampInicio: null
+        },
+        // ─────────────────────────────────────────────────────────────
         addShared(role, sentNome, content){
           this.sharedContext.push({role, sentNome, content});
           if(this.sharedContext.length > 20) this.sharedContext.shift(); // mantém últimas 20
@@ -2932,6 +3165,33 @@
           startTimer();
         }
 
+        // ── MEGX7 UNIDADE G — inicialização de sala ──────────────────
+        if(!state.nichoOrigem) state.nichoOrigem = state.nicho;
+        if(!state.memoriaPorNicho[state.nicho]) state.memoriaPorNicho[state.nicho]=[];
+        const sentAtiva = top.nome;
+        if(!state.sentinelasEnvolvidas.includes(sentAtiva)) state.sentinelasEnvolvidas.push(sentAtiva);
+        if(!Array.isArray(state.mapaTrajetoria)) state.mapaTrajetoria=[];
+        const n = state.nicho.toUpperCase();
+        if(state.mapaTrajetoria[state.mapaTrajetoria.length-1]!==n) state.mapaTrajetoria.push(n);
+
+        // Gera ORIN dinâmico e atualiza painéis
+        ptGerarORIN();
+        ptAtualizarTrajetoria();
+        ptAtualizarPaineis();
+
+        // Painel Prerrogativa: só para PROGRAMAÇÃO
+        const prerr = document.getElementById('modulo-prerrogativa');
+        if(prerr) prerr.style.display = (state.nicho==='PROGRAMAÇÃO') ? 'block' : 'none';
+
+        // Clock nos painéis
+        if(!state._ptClockInterval){
+          state._ptClockInterval = setInterval(()=>{
+            const el=document.getElementById('pt-ts');
+            if(el) el.textContent = new Date().toLocaleTimeString('pt-BR');
+          },1000);
+        }
+        // ─────────────────────────────────────────────────────────────
+
         go('s-sala');
         setTimeout(iniciarProtocoloEntrada,400);
       }
@@ -3120,6 +3380,44 @@
         return null;
       }
 
+      // ── MAPA COMPLETO DE SENTINELAS (independente do nicho) ──────
+      const ALL_SENTS = [
+        {id:'CG', nome:'CG · GIDEÃO'},
+        {id:'DS', nome:'DS · SERAFIM'},
+        {id:'GA', nome:'GA · ARCANJOS'},
+        {id:'PM', nome:'PM · PROFETA'},
+        {id:'RF', nome:'RF · RAFAEL'},
+      ];
+
+      // ── SYNC TOTAL: estado interno + todos os pontos de UI ────────
+      // Substitui as atualizações avulsas espalhadas pelo código.
+      function setSentinela(id, nome) {
+        state.sentinela    = id;
+        state.sentinelaNome = nome;
+
+        // Label no topo da sala
+        const lbl = document.getElementById('sala-sent-label');
+        if (lbl) lbl.textContent = nome;
+
+        // Highlight no sidebar
+        document.querySelectorAll('.sala-sent').forEach(s => s.classList.remove('sel'));
+        const el = document.getElementById('ss-' + id);
+        if (el) el.classList.add('sel');
+
+        // Separador visual no chat (avisa o operador da troca)
+        const msgs = document.getElementById('messages');
+        if (msgs) {
+          const sep = document.createElement('div');
+          sep.style.cssText = 'text-align:center;font-size:9px;color:rgba(201,168,76,.6);font-family:monospace;letter-spacing:2px;padding:6px 0;border-top:1px solid rgba(201,168,76,.1);margin:4px 0;';
+          sep.textContent = '⇌ SENTINELA ATIVA: ' + nome;
+          msgs.appendChild(sep);
+          msgs.scrollTop = 99999;
+        }
+
+        // Garante que histories existe para esta sentinela
+        if (!state.histories[id]) state.histories[id] = [];
+      }
+
       // ── CONSTRUTOR DE CONTEXTO ARTICULADO DA SALA (v2.0) ─────────
       function buildSentinelaContext(activeSent) {
         const ctx = state.sharedContext;
@@ -3203,24 +3501,26 @@
           const resp=text.trim().toUpperCase();
           if(resp.startsWith('S')||resp.includes('SIM')||resp.includes('ACEITO')||resp.includes('OK')){
             SALA_STATE.fase='TEMA';
+            // Usa a sentinela ATIVA no estado — não o top fixo do ranking
+            const confId   = state.sentinela;
+            const confNome = state.sentinelaNome;
             setTimeout(()=>{
-              addProtocolMsg(top.id,top.nome,
-                `Configuração confirmada. ${top.nome} está pronta para coordenar.
-
-      Qual é o tema desta sessão?`);
+              addProtocolMsg(confId, confNome,
+                `Configuração confirmada. ${confNome} coordenando esta sessão.\n\nQual é o tema desta sessão?`);
             },300);
           } else {
             SALA_STATE.fase='SELECAO_MANUAL';
+            const opts = SALA_STATE.rankingAtual.map((r,i)=>
+              `${i+1}. ${r.nome} — nota ${r.nota}`).join('\n');
+            // Sentinelas fora do ranking do nicho também disponíveis
+            const extras = ALL_SENTS
+              .filter(s => !SALA_STATE.rankingAtual.find(r => r.id === s.id))
+              .map(s => `· ${s.nome} (disponível)`).join('\n');
             setTimeout(()=>{
-              const opts = SALA_STATE.rankingAtual.map((r,i)=>
-                `${i+1}. ${r.nome} — nota ${r.nota}`).join('\n');
-              addProtocolMsg(top.id,top.nome,
-                `Entendido. Selecione manualmente a sentinela desejada:
-
-      ${opts}
-
-      Ou use o painel lateral para trocar.
-      Digite o número ou nome da sentinela.`);
+              addProtocolMsg(top.id, top.nome,
+                `Entendido. Sentinelas disponíveis para este nicho:\n\n${opts}` +
+                (extras ? `\n\nOutras disponíveis:\n${extras}` : '') +
+                `\n\nDigite o número, o nome ou a sigla da sentinela desejada.`);
             },300);
           }
           return;
@@ -3228,43 +3528,54 @@
 
         if(fase==='SELECAO_MANUAL'){
           addMsg('user',text);
-          const t=text.trim().toLowerCase();
-          const found=SALA_STATE.rankingAtual.find((r,i)=>
-            t.includes(r.nome.toLowerCase().split('·')[1]?.trim().toLowerCase()||'') ||
-            t.includes(r.id.toLowerCase()) ||
-            t===String(i+1)
-          );
-          if(found){
-            state.sentinela=found.id;
-            state.sentinelaNome=found.nome;
-            document.getElementById('sala-sent-label').textContent=found.nome;
-            document.querySelectorAll('.sala-sent').forEach(s=>s.classList.remove('sel'));
-            const el=document.getElementById('ss-'+found.id);
-            if(el)el.classList.add('sel');
-            SALA_STATE.fase='TEMA';
-            setTimeout(()=>{
-              addProtocolMsg(found.id,found.nome,
-                `${found.nome} assumindo coordenação.
+          const t = text.trim().toLowerCase();
 
-      Qual é o tema desta sessão?`);
-            },300);
+          // 1º: busca no ranking do nicho (por número, nome ou sigla)
+          let found = SALA_STATE.rankingAtual.find((r, i) =>
+            t === String(i + 1) ||
+            t.includes(r.id.toLowerCase()) ||
+            t.includes((r.nome.split('·')[1] || '').trim().toLowerCase())
+          );
+
+          // 2º: se não achou no ranking, busca em TODAS as sentinelas
+          if (!found) {
+            const match = ALL_SENTS.find(s =>
+              t.includes(s.id.toLowerCase()) ||
+              t.includes((s.nome.split('·')[1] || '').trim().toLowerCase())
+            );
+            if (match) found = match;
+          }
+
+          if (found) {
+            // Sync completo: estado + todos os pontos de UI
+            setSentinela(found.id, found.nome);
+            SALA_STATE.fase = 'TEMA';
+            setTimeout(() => {
+              addProtocolMsg(found.id, found.nome,
+                `${found.nome} assumindo coordenação desta sessão.\n\nQual é o tema que vamos trabalhar?`);
+            }, 300);
           } else {
-            addProtocolMsg(top.id,top.nome,'Não identifiquei a sentinela. Use o painel lateral ou digite o nome.');
+            addProtocolMsg(top.id, top.nome,
+              `Não identifiquei a sentinela. Digite a sigla (CG, DS, GA, PM, RF) ou o nome completo.`);
           }
           return;
         }
 
         if(fase==='TEMA'){
           addMsg('user',text);
-          SALA_STATE.tema=text;
-          SALA_STATE.fase='OPERACIONAL';
-          setTimeout(()=>{
-            addProtocolMsg(state.sentinela,state.sentinelaNome,
-              `Tema registrado: "${text}"
+          SALA_STATE.tema = text;
+          SALA_STATE.fase = 'OPERACIONAL';
 
-      Você é o maestro desta sessão. Conduza como desejar.
-      Quando quiser encerrar o tema, diga ENCERRAR ou LAUDO.`);
-          },300);
+          // Garante histories inicializado para a sentinela ativa
+          if (!state.histories[state.sentinela]) state.histories[state.sentinela] = [];
+
+          // Injeta o tema no sharedContext — sentinela lê na primeira resposta real
+          state.addShared('user', 'OPERADOR', `[TEMA DA SESSÃO] ${text}`);
+
+          setTimeout(() => {
+            addProtocolMsg(state.sentinela, state.sentinelaNome,
+              `Tema registrado: "${text}"\n\nConduzindo. Pode começar.`);
+          }, 300);
           return;
         }
 
@@ -3372,7 +3683,24 @@
             })
           });
           const data=await res.json();
-          const reply=data.text||data.response||(data.content&&data.content[0]&&data.content[0].text)||'Sem resposta.';
+
+          // Extração robusta — cobre todos os formatos conhecidos do Worker/Gemini
+          let reply = '';
+          if (data.error) {
+            // Worker retornou erro explícito — mostra mensagem útil
+            reply = `[Erro do sistema: ${data.error.message || JSON.stringify(data.error)}]`;
+          } else {
+            reply = data.text
+              || data.response
+              || (Array.isArray(data.content) && data.content.length > 0
+                  ? (data.content.find(c => c.type === 'text')?.text || data.content[0]?.text || '')
+                  : '')
+              || (typeof data === 'string' ? data : '');
+          }
+          // Fallback final — nunca retorna "Sem resposta" para perguntas simples
+          if (!reply || !reply.trim()) {
+            reply = `${state.sentinelaNome} está operacional. Reformule ou repita sua pergunta.`;
+          }
           state.pushHistory('assistant', reply);
           state.addShared('assistant', state.sentinelaNome, reply);
           if(document.getElementById('typingIndicator'))document.getElementById('typingIndicator').remove();
@@ -3417,6 +3745,14 @@
         document.getElementById('orin-plano').textContent=state.plano==='trial'?'Trial 30min':state.plano;
         document.getElementById('orin-inicio').textContent=state.sessionStart?state.sessionStart.toLocaleString('pt-BR'):'—';
         document.getElementById('orin-msgs').textContent=state.msgCount;
+        // Usa ORIN dinâmico gerado pelos painéis MEGX7
+        const orinCode = state.orinAtivo || '0000005';
+        const orinFull = document.getElementById('orin-full-id');
+        const orinIdLbl = document.getElementById('orin-id-label');
+        if(orinFull) orinFull.textContent = orinCode+'.abracadabraimc7.orin · SESSÃO '+state.plano.toUpperCase()+' · SELADO';
+        if(orinIdLbl) orinIdLbl.textContent = orinCode+' · SESSÃO ENCERRADA';
+        const orinDateEl = document.getElementById('orin-date');
+        if(orinDateEl) orinDateEl.textContent = dateStr;
       }
 
       // ── PAYMENT ───────────────────────────────────────────────────
@@ -3440,9 +3776,29 @@
         hideGhost();
         state.histories={CG:[],DS:[],GA:[],PM:[]};
         state.sharedContext=[];
-        state.sharedContext=[];
         state.msgCount=0;
         state.userEmail=null;
+        // Reset MEGX7 Unidade G
+        state.nichoOrigem=null;
+        state.sentinelasEnvolvidas=[];
+        state.mapaTrajetoria=[];
+        state.docsTecnicos=[];
+        state.orinAtivo='ORIN-NAO-GERADO';
+        state.moisesAtivo=false;
+        state.red={permitido:false,ativo:false,modo:'OFF',status:'OFF',orin:null,timestampInicio:null};
+        // Reset painéis UI
+        const ptMap={
+          'pt-orin-resumo':'--','pt-nicho':'--','pt-traj-resumo':'SESSÃO INATIVA',
+          'pt-traj-origem':'--','pt-traj-percurso':'--','pt-traj-sents':'--',
+          'pt-red-status':'OFF','pt-red-modo':'--','pt-red-orin':'--','pt-red-ts':'--'
+        };
+        Object.entries(ptMap).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v;});
+        const bd=document.getElementById('moises-status-badge');
+        if(bd){bd.textContent='MOISÉS OFF';bd.style.background='#1a1a1a';bd.style.color='#555';}
+        const mbtn=document.getElementById('btn-moises');
+        if(mbtn) mbtn.classList.remove('pt-moises-on');
+        const tl=document.getElementById('pt-trilha-lista');
+        if(tl) tl.innerHTML='SEM REGISTROS.';
         document.getElementById('messages').innerHTML=`
           <div class="msg sentinela">
             <div class="msg-header">
@@ -3469,6 +3825,147 @@
           if(el)el.textContent=labels[state.plano]||state.plano.toUpperCase();
         },500);
       });
+
+      // ══════════════════════════════════════════════════════════════
+      // MEGX7 UNIDADE G — PAINÉIS TÉCNICOS
+      // ══════════════════════════════════════════════════════════════
+
+      // Prefixo ORIN por nicho
+      function ptPrefixoORIN(n){
+        const m={
+          'PROJETO':'PROJ','PROCESSO':'PROC','FLOW':'FLOW','EMPRESARIAL':'EMP',
+          'JURÍDICO':'JUR','INVENÇÕES':'INV','GOVERNAMENTAL':'GOV','EDITORIAL':'EDIT',
+          'HI-TECH CREATORS':'HITECH','ARTES CÊNICAS / VÍDEOS / FILMES':'ART',
+          'ACADÊMICO':'ACAD','FUTURAMA':'FUT','LIVRE':'LIV','MEDICINA':'MED',
+          'PSICOLOGIA':'PSI','GASTRONOMIA':'GAST','PROGRAMAÇÃO':'PROG'
+        };
+        return m[n]||'GERAL';
+      }
+
+      // Gera código ORIN dinâmico com sequência por nicho/dia
+      function ptGerarORIN(){
+        const n = state.nicho||'LIVRE';
+        const pre = ptPrefixoORIN(n);
+        const d = new Date().toISOString().slice(0,10).replace(/-/g,'');
+        const k = 'seq_'+pre+'_'+d;
+        const seq = (parseInt(localStorage.getItem(k))||0)+1;
+        localStorage.setItem(k, seq);
+        state.orinAtivo = 'ORIN-'+pre+'-'+d+'-'+String(seq).padStart(3,'0');
+        state.timestampCompleto = new Date().toLocaleString('pt-BR');
+        // Atualiza painel 1
+        const r=document.getElementById('pt-orin-resumo');
+        if(r) r.textContent=state.orinAtivo;
+        ptAtualizarPaineis();
+      }
+
+      // Atualiza campos dos painéis 1-3
+      function ptAtualizarPaineis(){
+        const n=document.getElementById('pt-nicho');
+        const rt=document.getElementById('resumo-doc-tipo');
+        const dt=document.getElementById('doc-tipo');
+        const ts=document.getElementById('pt-ts');
+        if(n) n.textContent=state.nicho||'--';
+        if(rt&&dt) rt.textContent=dt.value;
+        if(ts) ts.textContent=state.timestampCompleto||new Date().toLocaleString('pt-BR');
+      }
+
+      // Atualiza painel 3 trajetória
+      function ptAtualizarTrajetoria(){
+        const per=document.getElementById('pt-traj-percurso');
+        const res=document.getElementById('pt-traj-resumo');
+        const sen=document.getElementById('pt-traj-sents');
+        const ori=document.getElementById('pt-traj-origem');
+        const traj=state.mapaTrajetoria||[];
+        if(per) per.textContent=traj.join(' → ')||'--';
+        if(res) res.textContent=traj.length>1
+          ? traj[0]+' › '+traj[traj.length-1]
+          : (traj.length===1?'INICIADA':'SESSÃO INATIVA');
+        if(sen) sen.textContent=(state.sentinelasEnvolvidas||[]).join(', ')||'--';
+        if(ori) ori.textContent=state.nichoOrigem||'--';
+      }
+
+      // Toggle colapso dos painéis (mobile: clique; desktop: hover via CSS)
+      function alternarPainelTecnico(el, ev){
+        if(['BUTTON','SELECT','OPTION'].includes(ev.target.tagName)) return;
+        if(window.innerWidth<=900) el.classList.toggle('is-open');
+      }
+
+      // Copia ORIN para clipboard
+      function ptCopiarORIN(){
+        if(!state.orinAtivo||state.orinAtivo==='ORIN-NAO-GERADO'){
+          alert('NENHUM ORIN ATIVO.');return;
+        }
+        if(navigator.clipboard&&navigator.clipboard.writeText){
+          navigator.clipboard.writeText(state.orinAtivo)
+            .then(()=>alert('ORIN COPIADO: '+state.orinAtivo))
+            .catch(()=>alert('FALHA AO COPIAR.'));
+        }else{
+          alert('CLIPBOARD INDISPONÍVEL.');
+        }
+      }
+
+      // Ativa/desativa Moisés (modo visão expandida)
+      function alternarMoises(btn){
+        state.moisesAtivo=!state.moisesAtivo;
+        const bd=document.getElementById('moises-status-badge');
+        const passo=state.moisesAtivo?'MOISÉS:ON':'MOISÉS:OFF';
+        if(!Array.isArray(state.mapaTrajetoria)) state.mapaTrajetoria=[];
+        if(state.mapaTrajetoria[state.mapaTrajetoria.length-1]!==passo) state.mapaTrajetoria.push(passo);
+        if(state.moisesAtivo){
+          if(btn) btn.classList.add('pt-moises-on');
+          if(bd){bd.textContent='MOISÉS ON';bd.style.background='var(--green)';bd.style.color='#000';}
+        }else{
+          if(btn) btn.classList.remove('pt-moises-on');
+          if(bd){bd.textContent='MOISÉS OFF';bd.style.background='#1a1a1a';bd.style.color='#555';}
+        }
+        ptAtualizarTrajetoria();
+      }
+
+      // Solicita permissão e inicia gravação RED
+      function ptSolicitarRED(modo){
+        if(!confirm('AUTORIZA GRAVAÇÃO '+modo+'?\nORIN: '+state.orinAtivo)) return;
+        state.red.permitido=true;
+        state.red.ativo=true;
+        state.red.modo=modo;
+        state.red.status='GRAVANDO';
+        state.red.orin=state.orinAtivo;
+        state.red.timestampInicio=state.timestampCompleto||new Date().toLocaleString('pt-BR');
+        const s=document.getElementById('pt-red-status');
+        const m=document.getElementById('pt-red-modo');
+        const o=document.getElementById('pt-red-orin');
+        const t=document.getElementById('pt-red-ts');
+        if(s) s.textContent='GRAVANDO';
+        if(m) m.textContent=modo;
+        if(o) o.textContent=state.orinAtivo;
+        if(t) t.textContent=state.red.timestampInicio;
+        if(!Array.isArray(state.mapaTrajetoria)) state.mapaTrajetoria=[];
+        state.mapaTrajetoria.push('RED:'+modo);
+        ptAtualizarTrajetoria();
+      }
+
+      // Ancora dado documental (painel 2 · Prerrogativa)
+      function ptAncorarDocumental(btn){
+        const tipo=(document.getElementById('doc-tipo')||{value:'MEMORIAL'}).value;
+        const doc={orin:state.orinAtivo,tipo:tipo,ts:new Date().toLocaleString('pt-BR'),nicho:state.nicho};
+        if(!Array.isArray(state.docsTecnicos)) state.docsTecnicos=[];
+        if(!Array.isArray(state.mapaTrajetoria)) state.mapaTrajetoria=[];
+        state.docsTecnicos.push(doc);
+        state.mapaTrajetoria.push('DOC:'+tipo);
+        ptAtualizarTrajetoria();
+        const list=document.getElementById('pt-trilha-lista');
+        if(list){
+          if(state.docsTecnicos.length===1) list.innerHTML='';
+          const item=document.createElement('div');
+          item.className='pt-trilha-item';
+          item.innerHTML='<span style="color:var(--gold)">'+tipo+'</span> · <span style="color:rgba(255,255,255,0.3);font-size:7px;">'+state.orinAtivo+'</span>';
+          list.prepend(item);
+        }
+        if(btn){
+          const orig=btn.textContent;
+          btn.textContent='ANCORADO ✓';
+          setTimeout(()=>btn.textContent=orig,1500);
+        }
+      }
     </script>
 
     <div
@@ -3484,7 +3981,7 @@
         pointer-events: none;
       "
     >
-      BUILD v2.0 | 27/03/2026 | InteracaoArticulada · BastaoLogic · AntiLoop
+      BUILD v2.2 | 27/03/2026 | MergeCompleto · MEGX7UnidadeG · XVII·PROG · ORINdinamico
     </div>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
