@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AbracadabraIMC⁷ · Portal · v4.0</title>
+    <title>AbracadabraIMC⁷ · Portal · v4.1</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -482,12 +482,13 @@
         background: var(--dark2);
         align-items: center;
         justify-content: center;
+        overflow-y: auto;
       }
       .boot-content {
         position: relative;
         z-index: 2;
         text-align: center;
-        padding: 24px 20px 30px;
+        padding: 16px 20px 20px;
         width: 100%;
         max-width: 640px;
       }
@@ -1755,7 +1756,7 @@
 ════════════════════════════════ */
       #s-mat {
         background: var(--dark);
-        overflow-y: auto;
+        overflow: hidden;
       }
       #s-mat .topbar {
         flex-shrink: 0;
@@ -1763,6 +1764,7 @@
       .mat-body {
         flex: 1;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         padding: 18px 20px 30px;
         position: relative;
         z-index: 2;
@@ -2638,6 +2640,7 @@
             </div>
             <div style="font-size:9px;color:rgba(201,168,76,0.4);">🔑</div>
           </div>
+          <button class="mode-toggle" onclick="toggleModo()" id="wrModeToggleBtn" title="Modo claro/escuro">☀ CLARO</button>
           <button class="back-btn" onclick="logout()">SAIR DO SISTEMA</button>
         </div>
       </div>
@@ -2732,119 +2735,17 @@
           </div>
         </div>
 
-        <!-- Pirâmide central -->
-        <div
-          class="wr-pyramid"
-          onclick="document.getElementById('s-warroom').querySelector('.wr-enter-btn').click()"
-        >
-          <svg
-            width="240"
-            height="206"
-            viewBox="0 0 220 190"
-            style="filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.25))"
-          >
-            <rect
-              x="90"
-              y="163"
-              width="40"
-              height="13"
-              rx="1"
-              fill="#C9A84C"
-              opacity=".4"
-            />
-            <rect
-              x="75"
-              y="148"
-              width="70"
-              height="13"
-              rx="1"
-              fill="#C9A84C"
-              opacity=".5"
-            />
-            <rect
-              x="60"
-              y="133"
-              width="100"
-              height="13"
-              rx="1"
-              fill="#C9A84C"
-              opacity=".58"
-            />
-            <rect
-              x="45"
-              y="118"
-              width="130"
-              height="13"
-              rx="1"
-              fill="#C9A84C"
-              opacity=".65"
-            />
-            <rect
-              x="30"
-              y="103"
-              width="160"
-              height="13"
-              rx="1"
-              fill="#C9A84C"
-              opacity=".72"
-            />
-            <rect
-              x="16"
-              y="88"
-              width="188"
-              height="13"
-              rx="1"
-              fill="#C9A84C"
-              opacity=".79"
-            />
-            <rect
-              x="3"
-              y="73"
-              width="214"
-              height="13"
-              rx="1"
-              fill="#C9A84C"
-              opacity=".86"
-            />
-            <polygon
-              points="110,10 208,180 12,180"
-              fill="none"
-              stroke="#C9A84C"
-              stroke-width="1.5"
-            />
-            <g>
-              <line
-                x1="110"
-                y1="10"
-                x2="110"
-                y2="-50"
-                stroke="#00D4FF"
-                stroke-width="2"
-                opacity=".7"
-              >
-                <animate
-                  attributeName="opacity"
-                  values=".3;.9;.3"
-                  dur="3s"
-                  repeatCount="indefinite"
-                />
-              </line>
-              <circle cx="110" cy="10" r="4" fill="#00D4FF">
-                <animate
-                  attributeName="r"
-                  values="3;7;3"
-                  dur="3s"
-                  repeatCount="indefinite"
-                />
-                <animate
-                  attributeName="opacity"
-                  values=".5;1;.5"
-                  dur="3s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-            </g>
-          </svg>
+        <!-- Vídeo central — warrom.mp4 -->
+        <div class="wr-pyramid" style="width:clamp(260px,38vw,520px);height:auto;border-radius:4px;overflow:hidden;box-shadow:0 0 60px rgba(0,212,255,0.18),0 0 120px rgba(201,168,76,0.08);">
+          <video
+            id="wr-video"
+            src="warrom.mp4"
+            autoplay
+            muted
+            loop
+            playsinline
+            style="width:100%;height:auto;display:block;border-radius:4px;"
+          ></video>
         </div>
         <div class="wr-overlay"></div>
 
@@ -3772,11 +3673,14 @@
       function toggleModo(){
         const body = document.body;
         const btn  = document.getElementById('modeToggleBtn');
+        const btn2 = document.getElementById('wrModeToggleBtn');
         body.classList.toggle('light-mode');
         if(body.classList.contains('light-mode')){
-          if(btn) btn.textContent = '🌙 ESCURO';
+          if(btn)  btn.textContent  = '🌙 ESCURO';
+          if(btn2) btn2.textContent = '🌙 ESCURO';
         } else {
-          if(btn) btn.textContent = '☀ CLARO';
+          if(btn)  btn.textContent  = '☀ CLARO';
+          if(btn2) btn2.textContent = '☀ CLARO';
         }
       }
 
@@ -5125,11 +5029,11 @@
           }
         }
 
-        // Hookar na função go() para inicializar ao abrir s-mat e pré-carregar ao entrar na warroom
+        // Hookar na função go() para inicializar ao abrir s-mat (guard contra dupla chamada)
+        let _matInitialized = false;
         const _goOriginal = window.go;
         window.go = function(id){
-          if(id === 's-mat') inicializarMat();
-          if(id === 's-warroom') setTimeout(inicializarMat, 100); // pré-carrega dados em background
+          if(id === 's-mat' && !_matInitialized){ _matInitialized = true; inicializarMat(); }
           _goOriginal(id);
         };
 
@@ -5155,7 +5059,7 @@
         pointer-events: none;
       "
     >
-      BUILD v4.0 | 14/04/2026 | QueruMIntegrada · WebhookNativo · TransmissaoEntrada · TransmissaoSaida · OrinAutoQueruM
+      BUILD v4.1 | 16/04/2026 | QueruMIntegrada · VideoWarroom · RankingGuard · OverflowFix · ModoClaro
     </div>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
