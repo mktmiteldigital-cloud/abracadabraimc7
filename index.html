@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AbracadabraIMC⁷ · Portal · v4.2</title>
+    <title>AbracadabraIMC⁷ · Portal · v4.3</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -2671,7 +2671,7 @@
           "
         ></div>
 
-        <!-- Sidebar esquerda: Sentinelas -->
+        <!-- Sidebar esquerda: Sentinelas + Salas Interativas -->
         <div class="wr-sidebar">
           <div class="sidebar-title">SENTINELAS</div>
           <div class="sent-item sel" onclick="selSent(this,'CG')" id="wr-CG">
@@ -2731,6 +2731,23 @@
             <div class="status-item">
               <div class="status-label">META 28/03</div>
               <div class="status-val" style="color: #e8b000">93%</div>
+            </div>
+          </div>
+
+          <!-- Salas Interativas -->
+          <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px;">
+            <div class="sidebar-title">SALAS INTERATIVAS</div>
+            <div class="status-item">
+              <div class="status-label">ÚLTIMA SALA</div>
+              <div class="status-val" style="color:var(--cyan)" id="wr-ultima-sala">—</div>
+            </div>
+            <div class="status-item">
+              <div class="status-label">SESSÕES</div>
+              <div class="status-val" style="color:var(--gold)" id="wr-sessoes">0</div>
+            </div>
+            <div class="status-item">
+              <div class="status-label">ORINs GERADOS</div>
+              <div class="status-val" style="color:var(--green)" id="wr-orins">0</div>
             </div>
           </div>
         </div>
@@ -2795,20 +2812,31 @@
             <div class="sidebar-title">PLANO ATIVO</div>
             <div class="status-item">
               <div class="status-label">TIPO</div>
-              <div
-                class="status-val"
-                style="color: #c9a84c"
-                id="wr-plano-label"
-              >
-                TRIAL 30MIN
-              </div>
+              <div class="status-val" style="color: #c9a84c" id="wr-plano-label">TRIAL 30MIN</div>
             </div>
             <div class="status-item">
               <div class="status-label">SENTINELA</div>
-              <div class="status-val" style="color: #00d4ff" id="wr-sent-label">
-                GIDEÃO
-              </div>
+              <div class="status-val" style="color: #00d4ff" id="wr-sent-label">GIDEÃO</div>
             </div>
+          </div>
+
+          <!-- Habitat 3D -->
+          <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px;">
+            <div class="sidebar-title">HABITAT 3D</div>
+            <div style="font-size:8px;color:rgba(255,255,255,0.25);letter-spacing:1px;margin-bottom:10px;">Ambientes imersivos · Óculos 3D</div>
+            <div class="status-item" style="opacity:0.5;cursor:not-allowed;">
+              <div class="status-label">SALA DE GUERRA</div>
+              <div class="status-val" style="color:var(--gold)">🔒 MEGX7</div>
+            </div>
+            <div class="status-item" style="opacity:0.5;cursor:not-allowed;">
+              <div class="status-label">CONSELHO IA⁷</div>
+              <div class="status-val" style="color:var(--gold)">🔒 MEGX7</div>
+            </div>
+            <div class="status-item" style="opacity:0.5;cursor:not-allowed;">
+              <div class="status-label">SALA SECRETA</div>
+              <div class="status-val" style="color:var(--purple, #a855f7)">🔒 MOR</div>
+            </div>
+            <div style="margin-top:8px;font-size:8px;color:rgba(168,85,247,0.5);letter-spacing:1px;text-align:center;">EM BREVE · PLANO MEGX7</div>
           </div>
         </div>
 
@@ -2932,6 +2960,41 @@
             title="PROGRAMAÇÃO"
           >
             XVII · PROGRAMAÇÃO
+          </button>
+          <button
+            class="nicho-btn"
+            onclick="selNicho(this,18,'ENGENHARIA')"
+            title="ENGENHARIA"
+          >
+            XVIII · ENGENHARIA
+          </button>
+          <button
+            class="nicho-btn"
+            onclick="selNicho(this,19,'E-BOOK')"
+            title="E-BOOK"
+          >
+            XIX · E-BOOK
+          </button>
+          <button
+            class="nicho-btn"
+            onclick="selNicho(this,20,'LIVES')"
+            title="LIVES"
+          >
+            XX · LIVES
+          </button>
+          <button
+            class="nicho-btn"
+            onclick="selNicho(this,21,'VIAGENS')"
+            title="VIAGENS"
+          >
+            XXI · VIAGENS
+          </button>
+          <button
+            class="nicho-btn"
+            onclick="selNicho(this,22,'PESQUISA E DESENVOLVIMENTO')"
+            title="PESQUISA E DESENVOLVIMENTO"
+          >
+            XXII · P&D
           </button>
         </div>
 
@@ -3492,6 +3555,11 @@
         'PSICOLOGIA':           [{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.8},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.2},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:8.7},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:8.3}],
         'GASTRONOMIA':          [{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.5},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.3},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.1},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:7.9}],
         'PROGRAMAÇÃO':          [{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.9},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.4},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:8.5},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:8.0}],
+        'ENGENHARIA':           [{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.8},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.5},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:8.6},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:8.1}],
+        'E-BOOK':               [{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.7},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.5},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:8.8},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:7.9}],
+        'LIVES':                [{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.6},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.3},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.0},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:7.8}],
+        'VIAGENS':              [{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.5},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.2},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:8.9},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:7.7}],
+        'PESQUISA E DESENVOLVIMENTO': [{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.8},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.3},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:8.7},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:8.2}],
       };
 
       // ── ESTADOS DA SALA ─────────────────────────────────────────────
@@ -4004,16 +4072,9 @@
       function iniciarProtocoloEntrada(){
         const ranking=SALA_STATE.rankingAtual;
         const top=ranking[0];
-        // Sala entra em silencio — sentinela ja esta ativa, operador fala primeiro
-        // Apenas atualiza estado para OPERACIONAL direto
         SALA_STATE.fase='OPERACIONAL';
         SALA_STATE.tema=null;
-        // Mostra apenas indicador visual discreto de qual sentinela esta ativa
-        const msgs=document.getElementById('messages');
-        const div=document.createElement('div');
-        div.style.cssText='text-align:center;padding:12px 0 4px;font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:2px;font-family:var(--font-title)';
-        div.textContent=`${top.nome} · ${state.nicho.toUpperCase()} · PRONTO`;
-        msgs.appendChild(div);
+        // Sala silenciosa — operador fala primeiro — sem mensagem automatica
       }
 
       function addProtocolMsg(sentId,sentNome,content){
@@ -5059,7 +5120,7 @@
         pointer-events: none;
       "
     >
-      BUILD v4.2 | 17/04/2026 | NomesBiblicos · SerafimAuditor · RFFantasma · SalaSilenciosa
+      BUILD v4.3 | 17/04/2026 | 20Nichos · SalasInterativas · Habitat3D · RankingCorrigido
     </div>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
