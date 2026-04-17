@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AbracadabraIMC⁷ · Portal · v4.1</title>
+    <title>AbracadabraIMC⁷ · Portal · v4.2</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -2806,7 +2806,7 @@
             <div class="status-item">
               <div class="status-label">SENTINELA</div>
               <div class="status-val" style="color: #00d4ff" id="wr-sent-label">
-                CG · GIDEÃO
+                GIDEÃO
               </div>
             </div>
           </div>
@@ -3063,7 +3063,7 @@
             SALA DE INTELIGÊNCIA · <span id="sala-nicho-label">PROJETO</span>
           </div>
           <div class="topbar-sub">
-            SENTINELA: <span id="sala-sent-label">CG · GIDEÃO</span>
+            SENTINELA: <span id="sala-sent-label">GIDEÃO</span>
           </div>
         </div>
         <div style="display: flex; align-items: center; gap: 10px">
@@ -3092,45 +3092,45 @@
           <div class="sala-sb-title">SENTINELAS</div>
           <div
             class="sala-sent sel"
-            onclick="changeSent(this,'CG','CG · GIDEÃO')"
+            onclick="changeSent(this,'CG','GIDEÃO')"
             id="ss-CG"
           >
             <div class="sala-sent-dot" style="background: #00d4ff"></div>
             <div class="sala-sent-info">
-              <div class="name">CG · GIDEÃO</div>
+              <div class="name">GIDEÃO</div>
               <div class="role">Research</div>
             </div>
           </div>
           <div
             class="sala-sent"
-            onclick="changeSent(this,'DS','DS · SERAFIM')"
+            onclick="changeSent(this,'DS','SERAFIM')"
             id="ss-DS"
           >
             <div class="sala-sent-dot" style="background: #1fd870"></div>
             <div class="sala-sent-info">
-              <div class="name">DS · SERAFIM</div>
+              <div class="name">SERAFIM</div>
               <div class="role">Audit</div>
             </div>
           </div>
           <div
             class="sala-sent"
-            onclick="changeSent(this,'GA','GA · ARCANJOS')"
+            onclick="changeSent(this,'GA','ARCANJOS')"
             id="ss-GA"
           >
             <div class="sala-sent-dot" style="background: #00d4ff"></div>
             <div class="sala-sent-info">
-              <div class="name">GA · ARCANJOS</div>
+              <div class="name">ARCANJOS</div>
               <div class="role">Operations</div>
             </div>
           </div>
           <div
             class="sala-sent"
-            onclick="changeSent(this,'PM','PM · PROFETA')"
+            onclick="changeSent(this,'PM','PROFETA')"
             id="ss-PM"
           >
             <div class="sala-sent-dot" style="background: #c9a84c"></div>
             <div class="sala-sent-info">
-              <div class="name">PM · PROFETA</div>
+              <div class="name">PROFETA</div>
               <div class="role">Metodologia</div>
             </div>
           </div>
@@ -3183,7 +3183,7 @@
           <div class="msg sentinela">
             <div class="msg-header">
               <span class="msg-sender" style="color: var(--cyan)"
-                >CG · GIDEÃO</span
+                >GIDEÃO</span
               >
               <span class="msg-time" id="initTime"></span>
               <button class="msg-pin" onclick="togglePin(this)">⚑</button>
@@ -3475,23 +3475,23 @@
       // ── STATE ──────────────────────────────────────────────────────
       // ── RANKING DE SENTINELAS POR NICHO (orientado por ranking IMC7) ──
       const NICHO_RANKING = {
-        'PROJETO':              [{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.6},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.5},{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:8.5},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.3}],
-        'PROCESSO':             [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.3},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.0},{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:8.6}],
-        'FLOW':                 [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.2},{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.0},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:8.7}],
-        'EMPRESARIAL':          [{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.8},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.7},{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:9.1},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.8}],
-        'JURÍDICO':             [{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:9.8},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.5},{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.0}],
-        'INVENÇÕES':            [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.5},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.2},{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:8.8}],
-        'GOVERNAMENTAL':        [{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:9.4},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.2},{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:8.7}],
-        'EDITORIAL':            [{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.9},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.8},{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:9.4},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.8}],
-        'HI-TECH CREATORS':              [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.6},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.3},{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.0}],
-        'ARTES CÊNICAS / VÍDEOS / FILMES':[{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.6},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.2},{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:8.9}],
-        'ACADÊMICO':                     [{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:9.5},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.3},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.7}],
-        'FUTURAMA':                      [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.0},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.0},{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:9.0}],
-        'LIVRE':                         [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.7},{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:9.4},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.9}],
-        'MEDICINA':                      [{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:9.7},{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.5},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.3}],
-        'PSICOLOGIA':                    [{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.8},{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:9.6},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.2},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:8.7}],
-        'GASTRONOMIA':                   [{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.5},{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:9.3},{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.1},{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:8.8}],
-        'PROGRAMAÇÃO':                   [{id:'CG',nome:'CG · GIDEÃO',ia:'Gemini Pro',nota:9.9},{id:'GA',nome:'GA · ARCANJOS',ia:'Gemini Pro',nota:9.4},{id:'DS',nome:'DS · SERAFIM',ia:'Gemini Pro',nota:8.9},{id:'PM',nome:'PM · PROFETA',ia:'GPT-4o',nota:8.5}],
+        'PROJETO':              [{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.6},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.5},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:8.3},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:7.8}],
+        'PROCESSO':             [{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.3},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.0},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:8.6},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:7.9}],
+        'FLOW':                 [{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.2},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.0},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:8.7},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:7.8}],
+        'EMPRESARIAL':          [{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.8},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.7},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:8.8},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:8.1}],
+        'JURÍDICO':             [{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.5},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.0},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:8.5},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:8.8}],
+        'INVENÇÕES':            [{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.5},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.2},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:8.8},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:7.9}],
+        'GOVERNAMENTAL':        [{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.2},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:8.7},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:8.4},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:8.6}],
+        'EDITORIAL':            [{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.9},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.8},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:8.8},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:8.0}],
+        'HI-TECH CREATORS':     [{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.6},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.3},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.0},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:7.8}],
+        'ARTES CÊNICAS / VÍDEOS / FILMES':[{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.6},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.2},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:8.9},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:7.7}],
+        'ACADÊMICO':            [{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.3},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.0},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:8.7},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:8.2}],
+        'FUTURAMA':             [{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.2},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.0},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:8.8},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:7.9}],
+        'LIVRE':                [{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.7},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:8.9},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:8.7},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:7.8}],
+        'MEDICINA':             [{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.5},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.3},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:8.8},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:8.5}],
+        'PSICOLOGIA':           [{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.8},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.2},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:8.7},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:8.3}],
+        'GASTRONOMIA':          [{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.5},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:9.3},{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.1},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:7.9}],
+        'PROGRAMAÇÃO':          [{id:'CG',nome:'GIDEÃO',ia:'Claude',nota:9.9},{id:'GA',nome:'ARCANJOS',ia:'Gemini',nota:9.4},{id:'PM',nome:'PROFETA',ia:'GPT-4o',nota:8.5},{id:'DS',nome:'SERAFIM',ia:'Genspark',nota:8.0}],
       };
 
       // ── ESTADOS DA SALA ─────────────────────────────────────────────
@@ -3507,7 +3507,7 @@
         plano: 'trial',
         provider: null,
         sentinela: 'CG',
-        sentinelaNome: 'CG · GIDEÃO',
+        sentinelaNome: 'GIDEÃO',
         nicho: 'Projeto',
         nichoId: 1,
         sessionStart: null,
@@ -3908,7 +3908,7 @@
         document.querySelectorAll('.sent-item').forEach(s=>s.classList.remove('sel'));
         el.classList.add('sel');
         currentSentWR=id;
-        const names={CG:'CG · GIDEÃO',DS:'DS · SERAFIM',GA:'GA · ARCANJOS',PM:'PM · PROFETA'};
+        const names={CG:'GIDEÃO',DS:'SERAFIM',GA:'ARCANJOS',PM:'PROFETA'};
         document.getElementById('wr-sent-label').textContent=names[id]||id;
       }
 
@@ -4004,15 +4004,16 @@
       function iniciarProtocoloEntrada(){
         const ranking=SALA_STATE.rankingAtual;
         const top=ranking[0];
-        const rankList=ranking.map((r,i)=>`${i+1}. ${r.nome} — nota ${r.nota}`).join('\n');
-        const msg=
-          `Nicho identificado: ${state.nicho.toUpperCase()}\n\n`+
-          `Com base no Ranking AbracadabraIMC⁷ — edição vigente, as sentinelas mais preparadas são:\n\n`+
-          rankList+'\n\n'+
-          `Sentinela recomendada: ${top.nome}\n\n`+
-          `Você aceita esta configuração?\nResponda SIM para confirmar ou NÃO para selecionar manualmente.`;
-        addProtocolMsg(top.id,top.nome,msg);
-        SALA_STATE.fase='CONFIRMACAO';
+        // Sala entra em silencio — sentinela ja esta ativa, operador fala primeiro
+        // Apenas atualiza estado para OPERACIONAL direto
+        SALA_STATE.fase='OPERACIONAL';
+        SALA_STATE.tema=null;
+        // Mostra apenas indicador visual discreto de qual sentinela esta ativa
+        const msgs=document.getElementById('messages');
+        const div=document.createElement('div');
+        div.style.cssText='text-align:center;padding:12px 0 4px;font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:2px;font-family:var(--font-title)';
+        div.textContent=`${top.nome} · ${state.nicho.toUpperCase()} · PRONTO`;
+        msgs.appendChild(div);
       }
 
       function addProtocolMsg(sentId,sentNome,content){
@@ -4036,7 +4037,7 @@
       function gerarLaudo(){
         SALA_STATE.laudoGerado=true;
         SALA_STATE.fase='LAUDO';
-        const top=SALA_STATE.rankingAtual[0]||{id:'CG',nome:'CG · GIDEÃO'};
+        const top=SALA_STATE.rankingAtual[0]||{id:'CG',nome:'GIDEÃO'};
         const laudo=
           `LAUDO DE SESSÃO\n`+
           `─────────────────────────────\n`+
@@ -4171,11 +4172,10 @@
       function parseSentinela(text){
         const t=text.toLowerCase();
         const map=[
-          {keys:['@cg','claude gideão','gideão','gideao','cg,','cg:','cg '],id:'CG',nome:'CG · GIDEÃO'},
-          {keys:['@ds','serafim','ds,','ds:','ds '],id:'DS',nome:'DS · SERAFIM'},
-          {keys:['@ga','gemini arcanjos','arcanjos','ga,','ga:','ga '],id:'GA',nome:'GA · ARCANJOS'},
-          {keys:['@rf','rafael','rf,','rf:','rf '],id:'RF',nome:'RF · RAFAEL'},
-          {keys:['@pm','profeta','pm,','pm:','pm ','profeta metodológica'],id:'PM',nome:'PM · PROFETA'},
+          {keys:['@cg','claude gideão','gideão','gideao','cg,','cg:','cg '],id:'CG',nome:'GIDEÃO'},
+          {keys:['@ds','serafim','ds,','ds:','ds '],id:'DS',nome:'SERAFIM'},
+          {keys:['@ga','gemini arcanjos','arcanjos','ga,','ga:','ga '],id:'GA',nome:'ARCANJOS'},
+          {keys:['@pm','profeta','pm,','pm:','pm ','profeta metodológica'],id:'PM',nome:'PROFETA'},
         ];
         for(const s of map){
           for(const k of s.keys){
@@ -4186,12 +4186,12 @@
       }
 
       // ── MAPA COMPLETO DE SENTINELAS (independente do nicho) ──────
+      // RF Rafael — Auditor Externo — nunca aparece nos nichos
       const ALL_SENTS = [
-        {id:'CG', nome:'CG · GIDEÃO'},
-        {id:'DS', nome:'DS · SERAFIM'},
-        {id:'GA', nome:'GA · ARCANJOS'},
-        {id:'PM', nome:'PM · PROFETA'},
-        {id:'RF', nome:'RF · RAFAEL'},
+        {id:'CG', nome:'GIDEÃO'},
+        {id:'DS', nome:'SERAFIM'},
+        {id:'GA', nome:'ARCANJOS'},
+        {id:'PM', nome:'PROFETA'},
       ];
 
       // ── SYNC TOTAL: estado interno + todos os pontos de UI ────────
@@ -4299,7 +4299,7 @@
 
         // ── PROTOCOLO DE ENTRADA ──────────────────────────────────────
         const fase = SALA_STATE.fase;
-        const top = SALA_STATE.rankingAtual[0]||{id:'CG',nome:'CG · GIDEÃO'};
+        const top = SALA_STATE.rankingAtual[0]||{id:'CG',nome:'GIDEÃO'};
 
         if(fase==='CONFIRMACAO'){
           addMsg('user',text);
@@ -4622,7 +4622,7 @@
         document.getElementById('messages').innerHTML=`
           <div class="msg sentinela">
             <div class="msg-header">
-              <span class="msg-sender" style="color:var(--cyan)">CG · GIDEÃO</span>
+              <span class="msg-sender" style="color:var(--cyan)">GIDEÃO</span>
               <span class="msg-time" id="initTime"></span>
               <button class="msg-pin" onclick="togglePin(this)">⚑</button>
             </div>
@@ -5059,7 +5059,7 @@
         pointer-events: none;
       "
     >
-      BUILD v4.1 | 16/04/2026 | QueruMIntegrada · VideoWarroom · RankingGuard · OverflowFix · ModoClaro
+      BUILD v4.2 | 17/04/2026 | NomesBiblicos · SerafimAuditor · RFFantasma · SalaSilenciosa
     </div>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
