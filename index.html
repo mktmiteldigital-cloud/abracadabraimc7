@@ -3689,6 +3689,7 @@
          });
          const data = await res.json();
          console.log("RESPOSTA", data);
+         alert(JSON.stringify(data));
           queruMSetStatus('flowith','ATIVO','var(--cyan)');
           if(QUERUM_CONFIG.logOrin){
             queruMSetStatus('ftf','REGISTRADO','rgba(168,85,247,0.9)');
