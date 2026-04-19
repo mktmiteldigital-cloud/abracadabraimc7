@@ -3675,7 +3675,7 @@
         if(!QUERUM_CONFIG.ativa) return;
         queruMSetStatus('flowith','TRANSMITINDO…','rgba(168,85,247,0.9)');
         try{
-          await fetch(QUERUM_CONFIG.webhookUrl,{
+          await fetch("https://abracadabraimc7-megx7.mitelmazard.workers.dev",{
             method:'POST',
             headers:{'Content-Type':'application/json'},
             body:JSON.stringify({
