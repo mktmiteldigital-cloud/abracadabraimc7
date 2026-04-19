@@ -3675,7 +3675,7 @@
         if(!QUERUM_CONFIG.ativa) return;
         queruMSetStatus('flowith','TRANSMITINDO…','rgba(168,85,247,0.9)');
         try{
-          await fetch("https://abracadabraimc7-megx7.mitelmazard.workers.dev",{
+         const res = await fetch("https://abracadabraimc7-megx7.mitelmazard.workers.dev",{
             method:'POST',
             headers:{'Content-Type':'application/json'},
             body:JSON.stringify({
@@ -3686,7 +3686,9 @@
               tipo: tipo || 'INTERACAO',
               timestamp: new Date().toISOString()
             })
-          });
+         });
+         const data = await res.json();
+         console.log("RESPOSTA", data);
           queruMSetStatus('flowith','ATIVO','var(--cyan)');
           if(QUERUM_CONFIG.logOrin){
             queruMSetStatus('ftf','REGISTRADO','rgba(168,85,247,0.9)');
