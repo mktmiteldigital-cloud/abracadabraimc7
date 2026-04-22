@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AbracadabraIMC⁷ · Portal · v4.3</title>
+    <title>AbracadabraIMC⁷ · Portal · v4.6</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -3588,6 +3588,23 @@
         apiLoading: false,
         histories: { CG:[], DS:[], GA:[], PM:[] },
         sharedContext: [], // memória compartilhada da sala — todas sentinelas leem
+        // ── ISOLAMENTO POR USUÁRIO + NICHO ───────────────────────────
+        _contextoIsolado: {}, // { email: { NICHO: { histories, sharedContext } } }
+        _getChave(){ return (this.userEmail||'anonimo')+'::'+( this.nicho||'LIVRE'); },
+        _initNicho(){
+          const u=this.userEmail||'anonimo';
+          const n=this.nicho||'LIVRE';
+          if(!this._contextoIsolado[u]) this._contextoIsolado[u]={};
+          if(!this._contextoIsolado[u][n]){
+            this._contextoIsolado[u][n]={
+              histories:{CG:[],DS:[],GA:[],PM:[]},
+              sharedContext:[]
+            };
+          }
+          // Aponta histories e sharedContext para o contexto isolado
+          this.histories = this._contextoIsolado[u][n].histories;
+          this.sharedContext = this._contextoIsolado[u][n].sharedContext;
+        },
         // ── MEGX7 UNIDADE G ──────────────────────────────────────────
         get nichoAtivo(){ return this.nicho; },          // alias para compatibilidade
         set nichoAtivo(v){ this.nicho = v; },
@@ -3609,13 +3626,32 @@
         },
         // ─────────────────────────────────────────────────────────────
         addShared(role, sentNome, content){
-          this.sharedContext.push({role, sentNome, content});
-          if(this.sharedContext.length > 20) this.sharedContext.shift(); // mantém últimas 20
+          // Garante que está no contexto isolado correto
+          const u=this.userEmail||'anonimo';
+          const n=this.nicho||'LIVRE';
+          if(this._contextoIsolado[u]&&this._contextoIsolado[u][n]){
+            this._contextoIsolado[u][n].sharedContext.push({role,sentNome,content});
+            if(this._contextoIsolado[u][n].sharedContext.length>20)
+              this._contextoIsolado[u][n].sharedContext.shift();
+            this.sharedContext=this._contextoIsolado[u][n].sharedContext;
+          } else {
+            this.sharedContext.push({role, sentNome, content});
+            if(this.sharedContext.length > 20) this.sharedContext.shift();
+          }
         },
         get conversationHistory(){ return this.histories[this.sentinela]||[]; },
         pushHistory(role, content){
-          if(!this.histories[this.sentinela]) this.histories[this.sentinela]=[];
-          this.histories[this.sentinela].push({role,content});
+          const u=this.userEmail||'anonimo';
+          const n=this.nicho||'LIVRE';
+          if(this._contextoIsolado[u]&&this._contextoIsolado[u][n]){
+            if(!this._contextoIsolado[u][n].histories[this.sentinela])
+              this._contextoIsolado[u][n].histories[this.sentinela]=[];
+            this._contextoIsolado[u][n].histories[this.sentinela].push({role,content});
+            this.histories=this._contextoIsolado[u][n].histories;
+          } else {
+            if(!this.histories[this.sentinela]) this.histories[this.sentinela]=[];
+            this.histories[this.sentinela].push({role,content});
+          }
         }
       };
 
@@ -3681,6 +3717,7 @@
             body:JSON.stringify({
               mensagem,
               nicho: nicho || state.nicho || 'LIVRE',
+              email: state.userEmail || 'anon',
               operador: state.userEmail || 'Operador',
               sentinela: sentinela || state.sentinela || 'CG',
               tipo: tipo || 'INTERACAO',
@@ -4005,9 +4042,10 @@
         state.nicho=currentNicho;
         state.sessionStart=new Date();
         state.msgCount=0;
-        state.histories={CG:[],DS:[],GA:[],PM:[]};
-        state.sharedContext=[];
-        state.sharedContext=[];
+
+        // ── ISOLAMENTO: carrega contexto do usuário+nicho atual ───────
+        state._initNicho();
+        // ─────────────────────────────────────────────────────────────
 
         // Reset protocolo
         SALA_STATE.fase='APRESENTACAO';
@@ -4064,6 +4102,18 @@
             const el=document.getElementById('pt-ts');
             if(el) el.textContent = new Date().toLocaleTimeString('pt-BR');
           },1000);
+        }
+        // ─────────────────────────────────────────────────────────────
+
+        // ── CONFIRMAÇÃO DE IDENTIDADE ────────────────────────────────
+        const emailLogado = state.userEmail || '';
+        const nomeDisplay = emailLogado ? emailLogado.split('@')[0].toUpperCase() : 'OPERADOR';
+        const msgEl = document.getElementById('messages');
+        if(msgEl && emailLogado){
+          const aviso = document.createElement('div');
+          aviso.style.cssText='text-align:center;font-size:9px;font-family:monospace;letter-spacing:1.5px;padding:8px 12px;margin:8px 0;border:1px solid rgba(201,168,76,0.3);background:rgba(201,168,76,0.05);color:rgba(201,168,76,0.8);';
+          aviso.innerHTML='🔑 SESSÃO AUTENTICADA · <strong>'+nomeDisplay+'</strong> · NICHO: '+state.nicho.toUpperCase()+'<br><span style="font-size:8px;color:rgba(255,255,255,0.3);">'+emailLogado+'</span>';
+          msgEl.appendChild(aviso);
         }
         // ─────────────────────────────────────────────────────────────
 
@@ -4567,6 +4617,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
             body:JSON.stringify({
               sentinela: activeSent,
               nicho: state.nicho || 'Projeto',
+              email: state.userEmail || 'anon',
               system: activeSystem,
               messages: state.histories[activeSent]||[]
             })
@@ -4666,7 +4717,9 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
       // ── DOWNLOAD QUERUM TXT ─────────────────────────────────────
       async function baixarQueruMTXT(){
         try{
-          const WORKER='https://abracadabraimc7-megx7.mitelmazard.workers.dev/querum';
+          const emailParam = encodeURIComponent(state.userEmail || 'anon');
+          const nichoParam = encodeURIComponent(state.nicho || 'default');
+          const WORKER='https://abracadabraimc7-megx7.mitelmazard.workers.dev/querum?email='+emailParam+'&nicho='+nichoParam;
           const res = await fetch(WORKER);
           if(!res.ok){alert('TXT não disponível. Realize pelo menos 1 sessão.');return;}
           const txt = await res.text();
@@ -4690,6 +4743,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
       async function logout(){
         clearInterval(state.timerInterval);
         hideGhost();
+        // Reseta apenas o contexto da sessão ativa — preserva histórico isolado
         state.histories={CG:[],DS:[],GA:[],PM:[]};
         state.sharedContext=[];
         state.msgCount=0;
@@ -5155,7 +5209,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         pointer-events: none;
       "
     >
-      BUILD v4.3 | 17/04/2026 | 20Nichos · SalasInterativas · Habitat3D · RankingCorrigido
+      BUILD v4.6 | 22/04/2026 | EmailWorker · EmailQueruM · EmailDownloadTXT · NC01-Fechada
     </div>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
