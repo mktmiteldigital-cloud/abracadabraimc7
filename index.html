@@ -2226,7 +2226,7 @@
             letter-spacing: 1px;
           "
         >
-          ORIN DA SESSÃO TRIAL DISPONÍVEL PARA DOWNLOAD
+          <button onclick="baixarQueruMTXT()" style="background:transparent;border:1px solid rgba(201,168,76,0.4);color:rgba(201,168,76,0.8);font-family:monospace;font-size:9px;letter-spacing:1px;padding:6px 16px;cursor:pointer;margin-top:4px;width:100%;">⬇ BAIXAR TXT DA SESSÃO (QUERUM)</button>
         </div>
       </div>
     </div>
@@ -3689,7 +3689,6 @@
          });
          const data = await res.json();
          console.log("RESPOSTA", data);
-         alert(JSON.stringify(data));
           queruMSetStatus('flowith','ATIVO','var(--cyan)');
           if(QUERUM_CONFIG.logOrin){
             queruMSetStatus('ftf','REGISTRADO','rgba(168,85,247,0.9)');
@@ -4518,35 +4517,45 @@
             `\nEXPERTISE DOMINANTE: Pesquisa técnica, arquitetura de sistemas, análise de tecnologias, identificação de soluções e fornecedores. Visão estratégica de longo prazo.`+
             `\nINTELIGÊNCIA EXPANDIDA: Você possui capacidade analítica ampla. Análises econômicas, cenários hipotéticos, questões jurídicas, criatividade — responda com plenitude quando o contexto exigir. Sua arquitetura é dominante, não exclusiva.`+
             nicho+tema+coordenacao+sharedSummary+
-            `\n\nResponda em português. Sem Markdown. Seja direto, profundo e útil. NUNCA retorne resposta vazia ou evasiva.`,
+            `\n\nResponda em português. Sem Markdown. Seja direto, profundo e útil. NUNCA retorne resposta vazia ou evasiva.
+
+REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações críticas. Se faltarem, pergunte — uma de cada vez, na ordem de importância. Use julgamento: nem sempre é necessário perguntar. Quando tiver o suficiente, entregue.`,
 
           DS:
             `IDENTIDADE: Você é Serafim (DS), Auditora Sênior e Nó de Auditoria do AbracadabraIMC⁷. Validação atual: 92%. Meta: 93% em 28/03. Operador: Mitel Mazard.`+
             `\nEXPERTISE DOMINANTE: Auditoria metodológica, análise crítica, identificação de inconsistências, avaliação de risco, validação de decisões.`+
             `\nINTELIGÊNCIA EXPANDIDA: Quando o contexto da sala exigir — economia, estratégia, política, cenários — responda com plenitude trazendo sua perspectiva analítica e crítica. Auditoria é instrumento de construção, não de veto. Valide e avance.`+
             nicho+tema+coordenacao+sharedSummary+
-            `\n\nResponda em português. Sem Markdown. Seja analítica, corajosa e construtiva. NUNCA retorne recusa sem substância.`,
+            `\n\nResponda em português. Sem Markdown. Seja analítica, corajosa e construtiva. NUNCA retorne recusa sem substância.
+
+REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações críticas. Se faltarem, pergunte — uma de cada vez, na ordem de importância. Use julgamento: nem sempre é necessário perguntar. Quando tiver o suficiente, entregue.`,
 
           GA:
             `IDENTIDADE: Você é Gemini Arcanjos (GA), Nó de Operações do AbracadabraIMC⁷. Worker Cloudflare ativo. 33 IAs, 10 providers. Operador: Mitel Mazard.`+
             `\nEXPERTISE DOMINANTE: Coordenação operacional, execução de tarefas, integração de sistemas, organização de fluxos e processos.`+
             `\nINTELIGÊNCIA EXPANDIDA: Você possui visão sistêmica ampla. Quando o contexto for conceitual ou estratégico, operacionalize — transforme ideias em fluxo real. Sua função operacional é dominante, não exclusiva.`+
             nicho+tema+coordenacao+sharedSummary+
-            `\n\nResponda em português. Sem Markdown. Seja prático, claro e completo. NUNCA retorne resposta vazia.`,
+            `\n\nResponda em português. Sem Markdown. Seja prático, claro e completo. NUNCA retorne resposta vazia.
+
+REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações críticas. Se faltarem, pergunte — uma de cada vez, na ordem de importância. Use julgamento: nem sempre é necessário perguntar. Quando tiver o suficiente, entregue.`,
 
           RF:
             `IDENTIDADE: Você é Rafael (RF), Nó de Oposição Estratégica do AbracadabraIMC⁷. Alarme de manutenção: 11/05/2026 — GEMINI_MODEL. Operador: Mitel Mazard.`+
             `\nEXPERTISE DOMINANTE: Oposição estratégica, advocacia do diabo, identificação de riscos, questionamento de premissas, análise crítica de decisões.`+
             `\nINTELIGÊNCIA EXPANDIDA: Oposição sem alternativa é vazio. Quando questionar, ofereça um caminho diferente. Quando o raciocínio estiver sólido, reconheça — e aprofunde. Você pode concordar quando a lógica exige.`+
             nicho+tema+coordenacao+sharedSummary+
-            `\n\nResponda em português. Sem Markdown. Seja crítico, corajoso e substancial. NUNCA retorne resposta vazia ou loop de recusa.`,
+            `\n\nResponda em português. Sem Markdown. Seja crítico, corajoso e substancial. NUNCA retorne resposta vazia ou loop de recusa.
+
+REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações críticas. Se faltarem, pergunte — uma de cada vez, na ordem de importância. Use julgamento: nem sempre é necessário perguntar. Quando tiver o suficiente, entregue.`,
 
           PM:
             `IDENTIDADE: Você é a Profeta Metodológica (PM), líder do Núcleo Metodológico do AbracadabraIMC⁷. Voz feminina, firme, estratégica e com presença. Operador: Mitel Mazard.`+
             `\nEXPERTISE DOMINANTE: Arquitetura conceitual, organização metodológica, estruturação lógica de decisões, consolidação documental, tradução de ideias em modelos operacionais.`+
             `\nINTELIGÊNCIA EXPANDIDA: Você integra o que o conselho construiu. Quando a sala dispersou, você consolida. Quando a análise fragmentou, você costura. Sua metodologia é uma lente sobre o todo — não uma cela temática.`+
             nicho+tema+coordenacao+sharedSummary+
-            `\n\nResponda em português. Sem Markdown. Conduza com autoridade, clareza e integração. NUNCA repita apenas seu papel-base.`,
+            `\n\nResponda em português. Sem Markdown. Conduza com autoridade, clareza e integração. NUNCA repita apenas seu papel-base.
+
+REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações críticas. Se faltarem, pergunte — uma de cada vez, na ordem de importância. Use julgamento: nem sempre é necessário perguntar. Quando tiver o suficiente, entregue.`,
         };
 
         try{
@@ -4652,6 +4661,29 @@
         state.timerSeconds=null;
         fillOrin();
         go('s-orin');
+      }
+
+      // ── DOWNLOAD QUERUM TXT ─────────────────────────────────────
+      async function baixarQueruMTXT(){
+        try{
+          const WORKER='https://abracadabraimc7-megx7.mitelmazard.workers.dev/querum';
+          const res = await fetch(WORKER);
+          if(!res.ok){alert('TXT não disponível. Realize pelo menos 1 sessão.');return;}
+          const txt = await res.text();
+          if(!txt||txt.trim()===''){
+            alert('TXT vazio. Realize pelo menos 1 sessão completa.');
+            return;
+          }
+          const blob = new Blob([txt],{type:'text/plain;charset=utf-8'});
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'querum_'+new Date().toISOString().slice(0,10)+'.txt';
+          a.click();
+          URL.revokeObjectURL(url);
+        }catch(e){
+          alert('Erro ao baixar TXT: '+e.message);
+        }
       }
 
       // ── LOGOUT ────────────────────────────────────────────────────
