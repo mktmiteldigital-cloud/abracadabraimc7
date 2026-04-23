@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AbracadabraIMC⁷ · Portal · v4.6</title>
+    <title>AbracadabraIMC⁷ · Portal · v4.7</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -4644,8 +4644,8 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
           state.pushHistory('assistant', reply);
           state.addShared('assistant', state.sentinelaNome, reply);
 
-          // ── QUERUM — TRANSMISSÃO DE SAÍDA ────────────────────────────
-          queruMTransmit(reply, state.nicho, state.sentinela, 'SAIDA_SENTINELA');
+          // ── QUERUM — SAÍDA REGISTRADA PELO WORKER (querum_continuo.txt) ────
+          // SAIDA_SENTINELA removida do frontend — elimina eco no TXT (v4.7)
 
           if(document.getElementById('typingIndicator'))document.getElementById('typingIndicator').remove();
           addMsg('assistant',reply);
@@ -5209,7 +5209,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         pointer-events: none;
       "
     >
-      BUILD v4.6 | 22/04/2026 | EmailWorker · EmailQueruM · EmailDownloadTXT · NC01-Fechada
+      BUILD v4.7 | 22/04/2026 | RemocaoEcoTXT · SAIDA_SENTINELA-off
     </div>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
