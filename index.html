@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AbracadabraIMC⁷ · Portal · v4.8</title>
+    <title>AbracadabraIMC⁷ · Portal · v4.9</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -2766,6 +2766,74 @@
         </div>
         <div class="wr-overlay"></div>
 
+        <!-- PLACA ESQUERDA — SALA INTERATIVA -->
+        <div style="
+          position:absolute;
+          left:calc(50% - clamp(200px,23vw,340px) - clamp(140px,14vw,200px));
+          top:44.7%;
+          transform:translateY(-50%);
+          z-index:5;
+          width:clamp(130px,13vw,190px);
+          background:rgba(5,8,16,0.88);
+          border:1px solid rgba(0,212,255,0.25);
+          border-radius:6px;
+          padding:14px 12px;
+          backdrop-filter:blur(8px);
+          box-shadow:0 0 30px rgba(0,212,255,0.08);
+        ">
+          <div style="font-family:var(--font-title);font-size:9px;color:var(--cyan);letter-spacing:2px;margin-bottom:8px;">SALA INTERATIVA</div>
+          <div style="font-size:8px;color:rgba(255,255,255,0.4);letter-spacing:1px;line-height:1.6;margin-bottom:10px;">Ambiente imersivo de sessões coordenadas entre sentinelas e operador.</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:7px;color:rgba(255,255,255,0.35);letter-spacing:0.5px;">MULTI-SENTINELA</span>
+              <span style="font-size:7px;color:var(--cyan);">✓</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:7px;color:rgba(255,255,255,0.35);letter-spacing:0.5px;">MEMÓRIA VIVA</span>
+              <span style="font-size:7px;color:var(--cyan);">✓</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:7px;color:rgba(255,255,255,0.35);letter-spacing:0.5px;">ORIN AUTO</span>
+              <span style="font-size:7px;color:rgba(255,255,255,0.25);">EM BREVE</span>
+            </div>
+          </div>
+          <div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,212,255,0.12);font-size:7px;color:rgba(0,212,255,0.5);letter-spacing:1px;text-align:center;">🔧 EM CONSTRUÇÃO</div>
+        </div>
+
+        <!-- PLACA DIREITA — HABITAT 3D -->
+        <div style="
+          position:absolute;
+          left:calc(50% + clamp(200px,23vw,340px) + clamp(10px,2vw,20px));
+          top:44.7%;
+          transform:translateY(-50%);
+          z-index:5;
+          width:clamp(130px,13vw,190px);
+          background:rgba(5,8,16,0.88);
+          border:1px solid rgba(168,85,247,0.25);
+          border-radius:6px;
+          padding:14px 12px;
+          backdrop-filter:blur(8px);
+          box-shadow:0 0 30px rgba(168,85,247,0.08);
+        ">
+          <div style="font-family:var(--font-title);font-size:9px;color:#a855f7;letter-spacing:2px;margin-bottom:8px;">HABITAT 3D</div>
+          <div style="font-size:8px;color:rgba(255,255,255,0.4);letter-spacing:1px;line-height:1.6;margin-bottom:10px;">Ambientes imersivos tridimensionais com WebVR e visualização espacial de dados.</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:7px;color:rgba(255,255,255,0.35);letter-spacing:0.5px;">SALA DE GUERRA</span>
+              <span style="font-size:7px;color:rgba(255,255,255,0.25);">🔒 MEGX7</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:7px;color:rgba(255,255,255,0.35);letter-spacing:0.5px;">CONSELHO IA⁷</span>
+              <span style="font-size:7px;color:rgba(255,255,255,0.25);">🔒 MEGX7</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:7px;color:rgba(255,255,255,0.35);letter-spacing:0.5px;">SALA SECRETA</span>
+              <span style="font-size:7px;color:rgba(168,85,247,0.6);">🔒 MOR</span>
+            </div>
+          </div>
+          <div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(168,85,247,0.12);font-size:7px;color:rgba(168,85,247,0.5);letter-spacing:1px;text-align:center;">🔧 EM CONSTRUÇÃO</div>
+        </div>
+
         <div class="wr-title-block">
           <div class="wr-title">SALA DE INTELIGÊNCIA · IMC⁷</div>
           <div class="wr-sub">SELECIONE UM NICHO E ENTRE NA SALA</div>
@@ -3574,6 +3642,8 @@
       const state = {
         plano: 'trial',
         provider: null,
+        userEmail: null,   // email verificado no login
+        idToken: null,     // token Firebase — enviado ao Worker v8
         sentinela: 'CG',
         sentinelaNome: 'GIDEÃO',
         nicho: 'Projeto',
@@ -3896,7 +3966,7 @@
             const msgs={'EMAIL_NOT_FOUND':'Usuário não encontrado.','INVALID_PASSWORD':'Senha incorreta.','INVALID_EMAIL':'E-mail inválido.','TOO_MANY_ATTEMPTS_TRY_LATER':'Muitas tentativas. Aguarde.','INVALID_LOGIN_CREDENTIALS':'E-mail ou senha incorretos.'};
             throw new Error(msgs[data.error.message]||data.error.message);
           }
-          state.provider='Email';state.userEmail=data.email;
+          state.provider='Email';state.userEmail=data.email;state.idToken=data.idToken||null;
           label.textContent='ENTRAR NO SISTEMA →';btn.disabled=false;
           startBoot();
         }catch(e){
@@ -3924,7 +3994,7 @@
             const msgs={'EMAIL_EXISTS':'E-mail já cadastrado. Clique em ENTRAR.','INVALID_EMAIL':'E-mail inválido.','WEAK_PASSWORD : Password should be at least 6 characters':'Senha fraca — mínimo 6 caracteres.'};
             throw new Error(msgs[data.error.message]||data.error.message);
           }
-          state.provider='Email';state.userEmail=data.email;
+          state.provider='Email';state.userEmail=data.email;state.idToken=data.idToken||null;
           label.textContent='CRIAR CONTA';btn.disabled=false;
           startBoot();
         }catch(e){
@@ -4620,6 +4690,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
             method:'POST',
             headers:{'Content-Type':'application/json'},
             body:JSON.stringify({
+              idToken:        state.idToken,
               sentinela:      activeSent,
               nicho:          state.nicho         || 'Projeto',
               email:          state.userEmail      || 'anon',
