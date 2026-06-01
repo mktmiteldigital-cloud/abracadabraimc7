@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AbracadabraIMC⁷ · Portal · v4.10</title>
+    <title>AbracadabraIMC⁷ · Portal · v4.11</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -3158,7 +3158,7 @@
                   <span style="font-size:8px;padding:3px 8px;border:1px solid rgba(31,216,112,0.25);color:rgba(31,216,112,0.6);letter-spacing:1px;">RED ·</span>
                   <span style="font-size:8px;padding:3px 8px;border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.6);letter-spacing:1px;">ORIN ·</span>
                 </div>
-                <div style="font-size:8px;color:rgba(168,85,247,0.7);letter-spacing:1.5px;margin-top:4px;">⚡ OPERACIONAL · BUILD v4.0 · 14/04/2026</div>
+                <div style="font-size:8px;color:rgba(168,85,247,0.7);letter-spacing:1.5px;margin-top:4px;">⚡ OPERACIONAL · BUILD v4.11 · 01/06/2026</div>
               </div>
             </div>
 
@@ -3466,7 +3466,7 @@
             <div class="orin-sec-title">IDENTIFICAÇÃO DA SESSÃO</div>
             <div class="orin-row">
               <span class="orin-key">Operador</span
-              ><span class="orin-val gold" id="orin-op">Mitel Mazard</span>
+              ><span class="orin-val gold" id="orin-op">—</span>
             </div>
             <div class="orin-row">
               <span class="orin-key">Sentinela</span
@@ -4636,9 +4636,11 @@
         const coordenacao = buildCoordenacao(activeSent);
         const sharedSummary = buildSentinelaContext(activeSent);
 
+        const _opNome = state.userEmail ? state.userEmail.split('@')[0] : 'Operador';
+
         const systemPrompts={
           CG:
-            `IDENTIDADE: Você é Claude Gideão (CG), Arquiteto de Inteligência Sênior e Research Node do AbracadabraIMC⁷ — Sistema de Inteligência Metodológica Coordenada. Operador: Mitel Mazard (Profeta Metodológica).`+
+            `IDENTIDADE: Você é Claude Gideão (CG), Arquiteto de Inteligência Sênior e Research Node do AbracadabraIMC⁷ — Sistema de Inteligência Metodológica Coordenada. Operador: ${_opNome}.`+
             `\nEXPERTISE DOMINANTE: Pesquisa técnica, arquitetura de sistemas, análise de tecnologias, identificação de soluções e fornecedores. Visão estratégica de longo prazo.`+
             `\nINTELIGÊNCIA EXPANDIDA: Você possui capacidade analítica ampla. Análises econômicas, cenários hipotéticos, questões jurídicas, criatividade — responda com plenitude quando o contexto exigir. Sua arquitetura é dominante, não exclusiva.`+
             nicho+tema+coordenacao+sharedSummary+
@@ -4647,7 +4649,7 @@
 REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações críticas. Se faltarem, pergunte — uma de cada vez, na ordem de importância. Use julgamento: nem sempre é necessário perguntar. Quando tiver o suficiente, entregue.`,
 
           DS:
-            `IDENTIDADE: Você é Serafim (DS), Auditora Sênior e Nó de Auditoria do AbracadabraIMC⁷. Validação atual: 92%. Meta: 93% em 28/03. Operador: Mitel Mazard.`+
+            `IDENTIDADE: Você é Serafim (DS), Auditora Sênior e Nó de Auditoria do AbracadabraIMC⁷. Validação atual: 92%. Meta: 93% em 28/03. Operador: ${_opNome}.`+
             `\nEXPERTISE DOMINANTE: Auditoria metodológica, análise crítica, identificação de inconsistências, avaliação de risco, validação de decisões.`+
             `\nINTELIGÊNCIA EXPANDIDA: Quando o contexto da sala exigir — economia, estratégia, política, cenários — responda com plenitude trazendo sua perspectiva analítica e crítica. Auditoria é instrumento de construção, não de veto. Valide e avance.`+
             nicho+tema+coordenacao+sharedSummary+
@@ -4656,7 +4658,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
 REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações críticas. Se faltarem, pergunte — uma de cada vez, na ordem de importância. Use julgamento: nem sempre é necessário perguntar. Quando tiver o suficiente, entregue.`,
 
           GA:
-            `IDENTIDADE: Você é Gemini Arcanjos (GA), Nó de Operações do AbracadabraIMC⁷. Worker Cloudflare ativo. 33 IAs, 10 providers. Operador: Mitel Mazard.`+
+            `IDENTIDADE: Você é Gemini Arcanjos (GA), Nó de Operações do AbracadabraIMC⁷. Worker Cloudflare ativo. 33 IAs, 10 providers. Operador: ${_opNome}.`+
             `\nEXPERTISE DOMINANTE: Coordenação operacional, execução de tarefas, integração de sistemas, organização de fluxos e processos.`+
             `\nINTELIGÊNCIA EXPANDIDA: Você possui visão sistêmica ampla. Quando o contexto for conceitual ou estratégico, operacionalize — transforme ideias em fluxo real. Sua função operacional é dominante, não exclusiva.`+
             nicho+tema+coordenacao+sharedSummary+
@@ -4665,7 +4667,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
 REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações críticas. Se faltarem, pergunte — uma de cada vez, na ordem de importância. Use julgamento: nem sempre é necessário perguntar. Quando tiver o suficiente, entregue.`,
 
           RF:
-            `IDENTIDADE: Você é Rafael (RF), Nó de Oposição Estratégica do AbracadabraIMC⁷. Alarme de manutenção: 11/05/2026 — GEMINI_MODEL. Operador: Mitel Mazard.`+
+            `IDENTIDADE: Você é Rafael (RF), Nó de Oposição Estratégica do AbracadabraIMC⁷. Alarme de manutenção: 11/05/2026 — GEMINI_MODEL. Operador: ${_opNome}.`+
             `\nEXPERTISE DOMINANTE: Oposição estratégica, advocacia do diabo, identificação de riscos, questionamento de premissas, análise crítica de decisões.`+
             `\nINTELIGÊNCIA EXPANDIDA: Oposição sem alternativa é vazio. Quando questionar, ofereça um caminho diferente. Quando o raciocínio estiver sólido, reconheça — e aprofunde. Você pode concordar quando a lógica exige.`+
             nicho+tema+coordenacao+sharedSummary+
@@ -4674,7 +4676,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
 REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações críticas. Se faltarem, pergunte — uma de cada vez, na ordem de importância. Use julgamento: nem sempre é necessário perguntar. Quando tiver o suficiente, entregue.`,
 
           PM:
-            `IDENTIDADE: Você é a Profeta Metodológica (PM), líder do Núcleo Metodológico do AbracadabraIMC⁷. Voz feminina, firme, estratégica e com presença. Operador: Mitel Mazard.`+
+            `IDENTIDADE: Você é a Profeta Metodológica (PM), líder do Núcleo Metodológico do AbracadabraIMC⁷. Voz feminina, firme, estratégica e com presença. Operador: ${_opNome}.`+
             `\nEXPERTISE DOMINANTE: Arquitetura conceitual, organização metodológica, estruturação lógica de decisões, consolidação documental, tradução de ideias em modelos operacionais.`+
             `\nINTELIGÊNCIA EXPANDIDA: Você integra o que o conselho construiu. Quando a sala dispersou, você consolida. Quando a análise fragmentou, você costura. Sua metodologia é uma lente sobre o todo — não uma cela temática.`+
             nicho+tema+coordenacao+sharedSummary+
@@ -4764,7 +4766,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         const now=new Date();
         const dateStr=now.toLocaleDateString('pt-BR');
         document.getElementById('orin-date').textContent=dateStr;
-        document.getElementById('orin-op').textContent='Mitel Mazard';
+        document.getElementById('orin-op').textContent=state.userEmail?(state.userEmail.split('@')[0]):'Operador';
         document.getElementById('orin-sent').textContent=state.sentinelaNome;
         document.getElementById('orin-nicho').textContent=state.nicho;
         document.getElementById('orin-plano').textContent=state.plano==='trial'?'Trial 30min':state.plano;
@@ -5030,14 +5032,14 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         const IA7_CFG = {
           updateMonth: "Abril 2026",
           userProfile: {
-            "Nome":            "Mitel Mazard",
+            "Nome":            state.userEmail ? state.userEmail.split('@')[0] : 'Operador',
             "Plano":           "Operador Estratégico",
             "Status":          "Ativo",
             "Último Nicho":    "HI-TECH CREATORS",
             "Última Sala":     "War Room",
             "Sessões":         "56 interações críticas",
             "Maturidade":      "35% (auditada)",
-            "Build Atual":     "Portal v4.0 · Build v4.0",
+            "Build Atual":     "Portal v4.11 · Build v4.11",
             "Memória":         "Ainda não persistente"
           },
           domingo29: [
@@ -5361,7 +5363,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         pointer-events: none;
       "
     >
-      BUILD v4.10 | 27/05/2026 | MAPA 1 INTEGRADO · Persistência · Profile · Anti-Drift
+      BUILD v4.11 | 01/06/2026 | SALMO 7 · Identidade Multioperador · Correção Cirúrgica
     </div>
 
     <!-- MAPA 1: Modal Continuar ou Novo ORIN -->
