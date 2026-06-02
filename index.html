@@ -5436,9 +5436,6 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
           bibRenderizar();
         }
 
-        // Atualizar biblioteca ao trocar de nicho
-        const _goOriginal = window._bibGoHook;
-        function bibAtualizarNicho() { bibRenderizar(); }
 
         async function bootComProfile() {
           const email = localStorage.getItem('email') || window.state?.email;
