@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AbracadabraIMC⁷ · Portal · v4.11</title>
+    <title>AbracadabraIMC⁷ · Portal · v4.12</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -3158,7 +3158,7 @@
                   <span style="font-size:8px;padding:3px 8px;border:1px solid rgba(31,216,112,0.25);color:rgba(31,216,112,0.6);letter-spacing:1px;">RED ·</span>
                   <span style="font-size:8px;padding:3px 8px;border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.6);letter-spacing:1px;">ORIN ·</span>
                 </div>
-                <div style="font-size:8px;color:rgba(168,85,247,0.7);letter-spacing:1.5px;margin-top:4px;">⚡ OPERACIONAL · BUILD v4.11 · 01/06/2026</div>
+                <div style="font-size:8px;color:rgba(168,85,247,0.7);letter-spacing:1.5px;margin-top:4px;">⚡ OPERACIONAL · BUILD v4.12 · 01/06/2026</div>
               </div>
             </div>
 
@@ -3179,6 +3179,21 @@
           </div>
 
         </div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+       BIBLIOTECA DE REFERÊNCIAS — F2.A/F2.B
+       Links externos por nicho (localStorage)
+       F2.B.2 FUTURO: sincronizar no R2 base/{email}/links.json
+      ══════════════════════════════════════ -->
+      <div id="biblioteca-links" style="position:absolute;bottom:60px;left:50%;transform:translateX(-50%);width:min(520px,90vw);background:rgba(5,8,16,0.92);border:1px solid rgba(201,168,76,0.22);border-radius:8px;padding:14px 16px;z-index:10;font-family:monospace;">
+        <div style="color:rgba(201,168,76,0.8);font-size:9px;letter-spacing:2px;margin-bottom:10px;">📎 BIBLIOTECA DE REFERÊNCIAS · <span id="bib-nicho-label" style="color:#00d4ff;">—</span></div>
+        <div style="display:flex;gap:6px;margin-bottom:8px;">
+          <input id="bib-url" type="text" placeholder="https://..." style="flex:2;background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.2);border-radius:4px;padding:5px 8px;color:#e0e0e0;font-family:monospace;font-size:10px;outline:none;" />
+          <input id="bib-label" type="text" placeholder="Nome do link" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.2);border-radius:4px;padding:5px 8px;color:#e0e0e0;font-family:monospace;font-size:10px;outline:none;" />
+          <button onclick="bibAdicionarLink()" style="background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.35);border-radius:4px;color:#c9a84c;font-family:monospace;font-size:10px;padding:5px 10px;cursor:pointer;white-space:nowrap;">+ ADD</button>
+        </div>
+        <div id="bib-lista" style="display:flex;flex-wrap:wrap;gap:6px;min-height:20px;"></div>
       </div>
 
       <div id="ia7-hover-map" class="ia7-hover-map" hidden></div>
@@ -3757,7 +3772,13 @@
         document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         window.scrollTo(0,0);
-        if(id==='s-warroom') atualizarPerfilMini();
+        if(id==='s-warroom'){
+          atualizarPerfilMini();
+          // F1.E — persistir email para bootComProfile funcionar em retorno
+          if(state.userEmail) localStorage.setItem('email', state.userEmail);
+          // F2.A — atualizar biblioteca de links para o nicho atual
+          if(typeof bibRenderizar === 'function') setTimeout(bibRenderizar, 100);
+        }
       }
 
       // ══════════════════════════════════════════════════════════════
@@ -4699,6 +4720,8 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
               sessaoId:       state.sessaoId       || ('sala_'+Date.now()),
               isFirst:        state.msgCount === 0,
               ambiente:       'WARROOM',
+              warroom:        's-warroom',
+              orinAtivo:      state.orinAtivo      || null,
               horarioInicio:  state.horarioInicio  || new Date().toISOString().slice(11,19),
               msgCount:       state.msgCount       || 0,
               system:         activeSystem,
@@ -5039,7 +5062,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
             "Última Sala":     "War Room",
             "Sessões":         "56 interações críticas",
             "Maturidade":      "35% (auditada)",
-            "Build Atual":     "Portal v4.11 · Build v4.11",
+            "Build Atual":     "Portal v4.12 · Build v4.12",
             "Memória":         "Ainda não persistente"
           },
           domingo29: [
@@ -5314,18 +5337,33 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
           if (!modal) return;
           modal.style.display = 'flex';
           const modalContent = document.getElementById('modalContent');
-          modalContent.innerHTML = `<div>Último ORIN:</div><div style="color:#c9a84c;margin:10px 0;font-weight:bold;">${profile.ultimaSessao.orin}</div><div style="color:#888;font-size:10px;">${profile.ultimaSessao.timestamp}</div>`;
+          const sess = profile.ultimaSessao || {};
+          modalContent.innerHTML = `
+            <div style="color:#888;font-size:10px;margin-bottom:6px;">ÚLTIMA SESSÃO</div>
+            <div style="color:#c9a84c;font-weight:bold;margin-bottom:4px;">${sess.orin || profile.ultimoORIN}</div>
+            <div style="color:#00d4ff;font-size:10px;margin-bottom:4px;">${sess.timestamp || ''}</div>
+            <div style="margin-top:10px;display:flex;gap:16px;justify-content:center;font-size:10px;">
+              <span style="color:#1fd870;">📁 ${sess.nicho || '—'}</span>
+              <span style="color:#a855f7;">⚔ ${sess.sentinela || '—'}</span>
+            </div>`;
         }
 
         function continuarOrinAnterior() {
           const profile = window._lastProfile;
           if (profile && profile.ultimaSessao) {
             window.state = window.state || {};
-            window.state.orinAtivo = profile.ultimaSessao.orin;
-            window.state.nicho = profile.ultimaSessao.nicho;
-            window.state.sentinela = profile.ultimaSessao.sentinela;
+            window.state.orinAtivo   = profile.ultimaSessao.orin;
+            window.state.nicho       = profile.ultimaSessao.nicho;
+            window.state.sentinela   = profile.ultimaSessao.sentinela;
+            // F1.E — persistir email ao continuar
+            if (profile.email) localStorage.setItem('email', profile.email);
             const modal = document.getElementById('continuarModal');
             if (modal) modal.style.display = 'none';
+            // F1.D — navegar automaticamente para o warroom
+            if (typeof selecionarNichoPorNome === 'function' && profile.ultimaSessao.nicho) {
+              selecionarNichoPorNome(profile.ultimaSessao.nicho);
+            }
+            go('s-warroom');
           }
         }
 
@@ -5333,6 +5371,74 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
           const modal = document.getElementById('continuarModal');
           if (modal) modal.style.display = 'none';
         }
+
+        // ═══════════════════════════════════════════════════════════
+        // BIBLIOTECA DE REFERÊNCIAS — F2.A (localStorage por nicho)
+        // F2.B.2 FUTURO: migrar para R2 base/{email}/links.json
+        //   GET  /links?email=X&nicho=Y
+        //   POST /links { email, nicho, url, label }
+        //   Migração: importar localStorage → R2 na ativação
+        // ═══════════════════════════════════════════════════════════
+        function bibChaveNicho() {
+          return 'links_' + (state.nicho || 'GERAL').replace(/\s+/g,'_').toUpperCase();
+        }
+
+        function bibCarregarLinks() {
+          const nicho = state.nicho || 'GERAL';
+          const label = document.getElementById('bib-nicho-label');
+          if (label) label.textContent = nicho;
+          const raw = localStorage.getItem(bibChaveNicho());
+          return raw ? JSON.parse(raw) : [];
+        }
+
+        function bibSalvarLinks(links) {
+          localStorage.setItem(bibChaveNicho(), JSON.stringify(links));
+        }
+
+        function bibRenderizar() {
+          const lista = document.getElementById('bib-lista');
+          if (!lista) return;
+          const links = bibCarregarLinks();
+          if (links.length === 0) {
+            lista.innerHTML = '<span style="color:rgba(255,255,255,0.2);font-size:9px;">Nenhum link cadastrado para este nicho.</span>';
+            return;
+          }
+          lista.innerHTML = links.map((l, i) =>
+            `<div style="display:flex;align-items:center;gap:4px;background:rgba(255,255,255,0.04);border:1px solid rgba(201,168,76,0.12);border-radius:4px;padding:4px 8px;">
+              <a href="${l.url}" target="_blank" rel="noopener" style="color:#00d4ff;font-size:9px;text-decoration:none;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${l.url}">${l.label || l.url}</a>
+              <button onclick="bibRemoverLink(${i})" style="background:none;border:none;color:rgba(255,100,100,0.5);cursor:pointer;font-size:9px;padding:0 2px;line-height:1;">✕</button>
+            </div>`
+          ).join('');
+        }
+
+        function bibAdicionarLink() {
+          const urlEl   = document.getElementById('bib-url');
+          const labelEl = document.getElementById('bib-label');
+          const url     = (urlEl?.value || '').trim();
+          const label   = (labelEl?.value || '').trim();
+          if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
+            urlEl.style.borderColor = 'rgba(255,100,100,0.6)';
+            setTimeout(() => { urlEl.style.borderColor = 'rgba(201,168,76,0.2)'; }, 1500);
+            return;
+          }
+          const links = bibCarregarLinks();
+          links.push({ url, label: label || url, ts: new Date().toLocaleString('pt-BR') });
+          bibSalvarLinks(links);
+          if (urlEl)   urlEl.value   = '';
+          if (labelEl) labelEl.value = '';
+          bibRenderizar();
+        }
+
+        function bibRemoverLink(idx) {
+          const links = bibCarregarLinks();
+          links.splice(idx, 1);
+          bibSalvarLinks(links);
+          bibRenderizar();
+        }
+
+        // Atualizar biblioteca ao trocar de nicho
+        const _goOriginal = window._bibGoHook;
+        function bibAtualizarNicho() { bibRenderizar(); }
 
         async function bootComProfile() {
           const email = localStorage.getItem('email') || window.state?.email;
@@ -5363,7 +5469,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         pointer-events: none;
       "
     >
-      BUILD v4.11 | 01/06/2026 | SALMO 7 · Identidade Multioperador · Correção Cirúrgica
+      BUILD v4.12 | 01/06/2026 | SALMO 7 PARETO · Continuidade Operacional · Biblioteca de Referências
     </div>
 
     <!-- MAPA 1: Modal Continuar ou Novo ORIN -->
