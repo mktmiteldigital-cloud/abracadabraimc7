@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AbracadabraIMC⁷ · Portal · v4.12</title>
+    <title>AbracadabraIMC⁷ · Portal · v4.14</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -3158,7 +3158,7 @@
                   <span style="font-size:8px;padding:3px 8px;border:1px solid rgba(31,216,112,0.25);color:rgba(31,216,112,0.6);letter-spacing:1px;">RED ·</span>
                   <span style="font-size:8px;padding:3px 8px;border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.6);letter-spacing:1px;">ORIN ·</span>
                 </div>
-                <div style="font-size:8px;color:rgba(168,85,247,0.7);letter-spacing:1.5px;margin-top:4px;">⚡ OPERACIONAL · BUILD v4.12 · 01/06/2026</div>
+                <div style="font-size:8px;color:rgba(168,85,247,0.7);letter-spacing:1.5px;margin-top:4px;">⚡ OPERACIONAL · BUILD v4.14 · 07/06/2026</div>
               </div>
             </div>
 
@@ -3858,7 +3858,8 @@
       // ── MINI PERFIL WAR ROOM ────────────────────────────────────────
       function atualizarPerfilMini(){
         const email = state.userEmail || '';
-        const nome  = email ? email.split('@')[0].toUpperCase() : 'OPERADOR';
+        const _dn = window._lastProfile?.displayName;
+        const nome  = (_dn ? _dn : (email ? email.split('@')[0] : 'OPERADOR')).toUpperCase();
         const initials = nome.length>=2 ? nome.substring(0,2) : nome.substring(0,1)+'M';
         const plano = state.plano==='trial'?'TRIAL 30MIN':(state.plano||'TRIAL').toUpperCase();
         const nEl=document.getElementById('wr-perfil-nome');
@@ -5062,7 +5063,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
             "Última Sala":     "War Room",
             "Sessões":         "56 interações críticas",
             "Maturidade":      "35% (auditada)",
-            "Build Atual":     "Portal v4.12 · Build v4.12",
+            "Build Atual":     "Portal v4.14 · Build v4.14",
             "Memória":         "Ainda não persistente"
           },
           domingo29: [
@@ -5246,6 +5247,16 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
             if(state.userEmail) perfil['Email'] = state.userEmail;
             if(state.nicho)     perfil['Último Nicho'] = state.nicho;
             if(state.plano)     perfil['Plano'] = state.plano==='trial'?'Trial 30min':state.plano;
+            // P1 — materializar dados reais do R2 (window._lastProfile)
+            const _r2 = window._lastProfile;
+            if(_r2){
+              if(_r2.displayName)                  perfil['Nome']          = _r2.displayName;
+              if(_r2.nivelOperacional)              perfil['Nível']         = _r2.nivelOperacional;
+              if(typeof _r2.sessoesTotais==='number') perfil['Sessões']    = _r2.sessoesTotais;
+              if(_r2.lastLogin)                    perfil['Último acesso'] = new Date(_r2.lastLogin).toLocaleDateString('pt-BR');
+              if(_r2.metadata?.ultimaSessao?.timestamp) perfil['Última sessão'] = _r2.metadata.ultimaSessao.timestamp;
+              if(Array.isArray(_r2.ORINsAtivos))   perfil['ORINs ativos']  = _r2.ORINsAtivos.length;
+            }
 
             // Header com avatar
             const emailVal = perfil['Email'] || '—';
@@ -5308,7 +5319,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         // ─── MAPA 1: PROFILE PERSISTÊNCIA ────────────────────────────────────
         async function recuperarProfile(email) {
           try {
-            const res = await fetch('/profile?email=' + encodeURIComponent(email));
+            const res = await fetch('https://abracadabraimc7-megx7.mitelmazard.workers.dev/profile?email=' + encodeURIComponent(email));
             if (!res.ok) return null;
             const data = await res.json();
             if (data.status !== 'ok') return null;
@@ -5319,16 +5330,10 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         }
 
         function exibirPerfil(profile) {
+          // P2 — dados renderizados pelo P1 em inicializarMat via window._lastProfile
+          // Painel flutuante removido — exibição ocorre dentro do #perfil-usuario no S-MAT
           if (!profile) return;
-          let profileContainer = document.getElementById('profile-container-mapa1');
-          if (!profileContainer) {
-            profileContainer = document.createElement('div');
-            profileContainer.id = 'profile-container-mapa1';
-            profileContainer.style.cssText = 'position:fixed;top:20px;right:20px;background:rgba(5,8,16,0.95);border:1px solid rgba(201,168,76,0.18);border-radius:6px;padding:15px;width:280px;font-family:monospace;font-size:11px;color:#e0e0e0;z-index:1000;max-height:350px;overflow-y:auto;';
-            document.body.appendChild(profileContainer);
-          }
-          const ultimasORINs = profile.ORINsAtivos ? profile.ORINsAtivos.slice(-3).reverse().map(o => `<div style="margin:8px 0;padding:8px;border-left:3px solid #00ff41;background:rgba(0,255,65,0.05);"><div style="color:#c9a84c;font-weight:bold;">${o.orin}</div><div style="color:#00d4ff;font-size:10px;">${o.timestamp}</div></div>`).join('') : '<div style="color:#666;">Nenhuma sessão</div>';
-          profileContainer.innerHTML = `<div style="border-bottom:1px solid #00d4ff;padding-bottom:10px;margin-bottom:10px;"><div style="color:#c9a84c;font-weight:bold;">${profile.displayName}</div><div style="color:#00d4ff;font-size:10px;">${profile.email}</div></div><div style="margin-bottom:10px;"><div style="color:#888;font-size:10px;">Sessões: <span style="color:#1fd870;">${profile.sessoesTotais}</span></div><div style="color:#888;font-size:10px;">ORINs: <span style="color:#1fd870;">${profile.orinsTotais}</span></div></div><div style="border-top:1px solid #333;padding-top:10px;"><div style="color:#888;font-size:10px;margin-bottom:8px;">ÚLTIMAS:</div>${ultimasORINs}</div>`;
+          window._lastProfile = profile;
         }
 
         function ofererecerContinuarOuNovo(profile) {
@@ -5360,9 +5365,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
             const modal = document.getElementById('continuarModal');
             if (modal) modal.style.display = 'none';
             // F1.D — navegar automaticamente para o warroom
-            if (typeof selecionarNichoPorNome === 'function' && profile.ultimaSessao.nicho) {
-              selecionarNichoPorNome(profile.ultimaSessao.nicho);
-            }
+            // nicho já restaurado em state.nicho linha acima
             go('s-warroom');
           }
         }
@@ -5466,7 +5469,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         pointer-events: none;
       "
     >
-      BUILD v4.12 | 01/06/2026 | SALMO 7 PARETO · Continuidade Operacional · Biblioteca de Referências
+      BUILD v4.14 | 07/06/2026 | Homologação · R2 URL absoluta · continuarOrinAnterior corrigido
     </div>
 
     <!-- MAPA 1: Modal Continuar ou Novo ORIN -->
