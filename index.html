@@ -5453,7 +5453,14 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
             window._lastProfile = profile;
             exibirPerfil(profile);
             if (profile.ultimoORIN) {
-              setTimeout(() => { ofererecerContinuarOuNovo(profile); }, 800);
+              // Salmo 8 — HOTFIX UX | 15/07/2026
+              // Antes: perguntava "continuar ou novo" a cada login (modal).
+              // Agora: continuidade é automática e silenciosa — sem pergunta,
+              // sem interrupção. O Operador Mor não decide isso toda vez.
+              window.state = window.state || {};
+              window.state.orinAtivo = profile.ultimaSessao?.orin || profile.ultimoORIN;
+              window.state.nicho     = profile.ultimaSessao?.nicho || window.state.nicho;
+              window.state.sentinela = profile.ultimaSessao?.sentinela || window.state.sentinela;
             }
             // Salmo 8 — EVA-VAROA | 14/07/2026
             // "Anda comigo" — presença automática, exclusiva ao Operador Mor.
@@ -5593,7 +5600,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 
 <!-- SALMO 8 — EVA-VAROA MODAL BEM-VINDO DE VOLTA | 13/07/2026 -->
-<div id="modal-eva-varoa-retorno" class="modal-eva-overlay" style="display:none; position:fixed; inset:0; background:rgba(5,8,16,0.95); z-index:9999; display:flex; align-items:center; justify-content:center;">
+<div id="modal-eva-varoa-retorno" class="modal-eva-overlay" style="display:none; position:fixed; bottom:20px; right:20px; max-width:360px; max-height:70vh; overflow-y:auto; background:rgba(5,8,16,0.97); border:1px solid rgba(0,255,159,0.25); border-radius:10px; z-index:500; box-shadow:0 8px 24px rgba(0,0,0,0.5);">
   
   <div class="modal-eva-content" style="
     background: linear-gradient(135deg, #0d1428 0%, #080c18 100%);
