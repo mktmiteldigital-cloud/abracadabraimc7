@@ -4133,6 +4133,24 @@
       }
 
       function enterSala(){
+        // Salmo 8 — HOTFIX CRÍTICO 3 | 16/07/2026
+        // Ao trocar de nicho/ambiente, exporta a sessão anterior antes de
+        // sobrescrever o state — é o gatilho que faltava pra EVA-VAROA ter
+        // memória real (sem isso, /export-session nunca era chamado).
+        // Fire-and-forget: não bloqueia a troca de sala, nem quebra se falhar.
+        if (state.sessaoId && state.nicho && state.userEmail) {
+          fetch('https://abracadabraimc7-megx7.mitelmazard.workers.dev/export-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: state.userEmail,
+              sessionId: state.sessaoId,
+              nicho: state.nicho,
+              ambiente: 'WARROOM'
+            })
+          }).catch(() => {});
+        }
+
         state.nicho=currentNicho;
         state.sessionStart=new Date();
         state.msgCount=0;
