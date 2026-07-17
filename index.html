@@ -5276,6 +5276,10 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
               if(Array.isArray(_r2.ORINsAtivos))   perfil['ORINs ativos']  = _r2.ORINsAtivos.length;
             }
 
+            // Salmo 8 — DIAGNÓSTICO TEMPORÁRIO | 16/07/2026
+            // Linha visível de debug — remover depois de confirmado
+            perfil['🔧 Diagnóstico'] = _r2 ? ('OK · nível=' + (_r2.nivelOperacional || 'AUSENTE')) : 'SEM DADOS DO WORKER';
+
             // Header com avatar
             const emailVal = perfil['Email'] || '—';
             const nomeVal  = perfil['Operador'] || perfil['Nome'] || emailVal.split('@')[0] || 'OPERADOR';
