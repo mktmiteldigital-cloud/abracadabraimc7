@@ -3158,7 +3158,7 @@
                   <span style="font-size:8px;padding:3px 8px;border:1px solid rgba(31,216,112,0.25);color:rgba(31,216,112,0.6);letter-spacing:1px;">RED ·</span>
                   <span style="font-size:8px;padding:3px 8px;border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.6);letter-spacing:1px;">ORIN ·</span>
                 </div>
-                <div style="font-size:8px;color:rgba(168,85,247,0.7);letter-spacing:1.5px;margin-top:4px;">⚡ OPERACIONAL · BUILD v4.15 · 14/06/2026</div>
+                <div style="font-size:8px;color:rgba(168,85,247,0.7);letter-spacing:1.5px;margin-top:4px;">⚡ OPERACIONAL · BUILD v4.15 · HOTFIX3 · 16/07/2026</div>
               </div>
             </div>
 
@@ -5325,11 +5325,19 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
           }
         }
 
-        // Hookar na função go() para inicializar ao abrir s-mat (guard contra dupla chamada)
-        let _matInitialized = false;
+        // Salmo 8 — HOTFIX CRÍTICO 5 | 16/07/2026
+        // BUG: esse guard externo (_matInitialized) impedia inicializarMat()
+        // de rodar de novo depois da primeira vez — então se o Operador
+        // abrisse o Perfil ANTES do window._lastProfile chegar (fetch
+        // assíncrono do bootComProfile), a tela ficava PRA SEMPRE travada
+        // com os dados de exemplo, mesmo saindo e voltando. A própria
+        // função já tem um guard interno (matInicializado) que protege
+        // ranking/domingo de duplicar — esse aqui só travava o perfil sem
+        // necessidade. Removido: agora reabrir o Perfil sempre atualiza
+        // com os dados reais mais recentes.
         const _goOriginal = window.go;
         window.go = function(id){
-          if(id === 's-mat' && !_matInitialized){ _matInitialized = true; inicializarMat(); }
+          if(id === 's-mat'){ inicializarMat(); }
           _goOriginal(id);
         };
 
@@ -5505,7 +5513,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         pointer-events: none;
       "
     >
-      BUILD v4.15 | 14/06/2026 | SALMO 8 · QUERUM ELO INSTITUCIONAL · Cirurgias 1+2
+      BUILD v4.15 | HOTFIX3 | 16/07/2026 | SALMO 8 · QUERUM ELO INSTITUCIONAL · Cirurgias 1-4 + Hotfix chat/UX/profile/export-session
     </div>
 
     <!-- MAPA 1: Modal Continuar ou Novo ORIN -->
