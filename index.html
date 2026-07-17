@@ -3772,21 +3772,19 @@
         document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         window.scrollTo(0,0);
+        // Salmo 8 — HOTFIX CRÍTICO 7 | 17/07/2026
+        // BUG: o HOTFIX 6 só disparava bootComProfile() ao entrar em
+        // 's-warroom' — mas existem atalhos que vão direto pro Perfil
+        // ('s-mat', botão 🔑) sem passar pelo WarRoom antes. Nesses casos
+        // window._lastProfile continuava null. Movido pra cá, fora do
+        // bloco condicional, para cobrir QUALQUER navegação — a própria
+        // função já verifica se há email disponível antes de buscar.
+        if(state.userEmail) localStorage.setItem('email', state.userEmail);
+        if(typeof bootComProfile === 'function') bootComProfile();
         if(id==='s-warroom'){
           atualizarPerfilMini();
-          // F1.E — persistir email para bootComProfile funcionar em retorno
-          if(state.userEmail) localStorage.setItem('email', state.userEmail);
           // F2.A — atualizar biblioteca de links para o nicho atual
           if(typeof bibRenderizar === 'function') setTimeout(bibRenderizar, 100);
-          // Salmo 8 — HOTFIX CRÍTICO 6 | 16/07/2026
-          // BUG RAIZ: bootComProfile() só era chamada 1x, presa ao evento
-          // DOMContentLoaded (1s após a página carregar) — se o login
-          // acontecesse DEPOIS disso (o caso normal), o perfil real do
-          // Worker nunca era buscado, e window._lastProfile ficava para
-          // sempre null. Isso explicava tanto o QueruM não aparecer quanto
-          // a EVA-VAROA nunca "seguir" o Operador. Corrigido: dispara de
-          // novo aqui, no momento real em que o email já está disponível.
-          if(typeof bootComProfile === 'function') bootComProfile();
         }
       }
 
@@ -5491,6 +5489,18 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
           if (profile) {
             window._lastProfile = profile;
             exibirPerfil(profile);
+            // Salmo 8 — HOTFIX CRÍTICO 7 | 17/07/2026
+            // BUG: inicializarMat() (que desenha a tela de Perfil, incluindo
+            // o botão QUERUM) roda de forma SÍNCRONA assim que a tela
+            // 's-mat' abre — mas bootComProfile() é assíncrona. Isso
+            // significa que a tela sempre desenhava ANTES do perfil real
+            // chegar do Worker, usando window._lastProfile ainda vazio.
+            // Correção: se a tela de Perfil estiver aberta quando o fetch
+            // terminar, redesenha ela agora, com os dados reais já presentes.
+            const telaPerfilAberta = document.getElementById('s-mat')?.classList.contains('active');
+            if (telaPerfilAberta && typeof inicializarMat === 'function') {
+              inicializarMat();
+            }
             if (profile.ultimoORIN) {
               // Salmo 8 — HOTFIX UX | 15/07/2026
               // Antes: perguntava "continuar ou novo" a cada login (modal).
