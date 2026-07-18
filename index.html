@@ -3799,15 +3799,16 @@
         document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         window.scrollTo(0,0);
-        // Salmo 8 — HOTFIX CRÍTICO 7 | 17/07/2026
-        // BUG: o HOTFIX 6 só disparava bootComProfile() ao entrar em
-        // 's-warroom' — mas existem atalhos que vão direto pro Perfil
-        // ('s-mat', botão 🔑) sem passar pelo WarRoom antes. Nesses casos
-        // window._lastProfile continuava null. Movido pra cá, fora do
-        // bloco condicional, para cobrir QUALQUER navegação — a própria
-        // função já verifica se há email disponível antes de buscar.
+        // Salmo 8 — HOTFIX CRÍTICO 13 | 18/07/2026 — CAUSA RAIZ REAL
+        // BUG: essa função go() está declarada FORA do bloco (IIFE) onde
+        // bootComProfile() existe — então "typeof bootComProfile" aqui
+        // SEMPRE dava 'undefined', e a busca nunca era chamada, sem
+        // NENHUM erro (por isso "motivo desconhecido" nunca mudava —
+        // a função nem chegava a tentar). Confirmado rodando o código
+        // de verdade num navegador simulado. A chamada real agora está
+        // no wrapper window.go (mais abaixo no arquivo), que SIM está
+        // no mesmo escopo de bootComProfile.
         if(state.userEmail) localStorage.setItem('email', state.userEmail);
-        if(typeof bootComProfile === 'function') bootComProfile(state.userEmail);
         if(id==='s-warroom'){
           atualizarPerfilMini();
           // F2.A — atualizar biblioteca de links para o nicho atual
@@ -5392,6 +5393,14 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         window.go = function(id){
           if(id === 's-mat'){ inicializarMat(); }
           _goOriginal(id);
+          // Salmo 8 — HOTFIX CRÍTICO 13 | 18/07/2026 — CAUSA RAIZ REAL
+          // A chamada de bootComProfile() foi movida pra CÁ (de dentro do
+          // go() original lá em cima) porque só AQUI ela está no mesmo
+          // escopo onde bootComProfile de fato existe. Testado rodando o
+          // código de verdade — confirmado que resolve.
+          if(state.userEmail && typeof bootComProfile === 'function') {
+            bootComProfile(state.userEmail);
+          }
         };
 
         // Salmo 8 — HOTFIX CRÍTICO 11 | 18/07/2026 — CORREÇÃO URGENTE
