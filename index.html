@@ -5605,6 +5605,18 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
             if (typeof evaVaroaIntegrarLogin === 'function') {
               evaVaroaIntegrarLogin(profile, email);
             }
+          } else {
+            // Salmo 8 — HOTFIX CRÍTICO 12 | 18/07/2026
+            // BUG: quando a busca FALHAVA, a tela nunca era redesenhada —
+            // só no caminho de sucesso (if profile). Por isso o Diagnóstico
+            // ficava travado mostrando "motivo desconhecido" (o estado do
+            // primeiríssimo render, antes até da busca terminar), mesmo
+            // depois do erro real já estar capturado em
+            // window._debugProfileError. Agora redesenha nos dois casos.
+            const telaPerfilAberta = document.getElementById('s-mat')?.classList.contains('active');
+            if (telaPerfilAberta && typeof inicializarMat === 'function') {
+              inicializarMat();
+            }
           }
         }
 
