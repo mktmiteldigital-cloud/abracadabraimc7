@@ -5285,7 +5285,9 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
 
             // Salmo 8 — DIAGNÓSTICO TEMPORÁRIO | 16/07/2026
             // Linha visível de debug — remover depois de confirmado
-            perfil['🔧 Diagnóstico'] = _r2 ? ('OK · nível=' + (_r2.nivelOperacional || 'AUSENTE')) : 'SEM DADOS DO WORKER';
+            perfil['🔧 Diagnóstico'] = _r2
+              ? ('OK · nível=' + (_r2.nivelOperacional || 'AUSENTE'))
+              : ('SEM DADOS · ' + (window._debugProfileError || 'motivo desconhecido'));
 
             // Header com avatar
             const emailVal = perfil['Email'] || '—';
@@ -5361,14 +5363,23 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         // ─── MAPA 1: PROFILE PERSISTÊNCIA ────────────────────────────────────
         async function recuperarProfile(email) {
           try {
-            const res = await fetch('https://abracadabraimc7-megx7.mitelmazard.workers.dev/profile?email=' + encodeURIComponent(email));
-            if (!res.ok) return null;
+            // Salmo 8 — HOTFIX CRÍTICO 8 | 17/07/2026
+            // BUG: o fetch não tinha instrução anti-cache. Sem
+            // Cache-Control no Worker, o navegador pode reaproveitar uma
+            // resposta antiga (de antes do OPERADOR_MOR_EMAILS existir)
+            // pra essa MESMA URL, mesmo com o Worker já corrigido.
+            // Corrigido: cache:'no-store' + parâmetro anti-cache (timestamp).
+            const url = 'https://abracadabraimc7-megx7.mitelmazard.workers.dev/profile?email='
+              + encodeURIComponent(email) + '&_=' + Date.now();
+            const res = await fetch(url, { cache: 'no-store' });
+            if (!res.ok) { window._debugProfileError = 'HTTP ' + res.status; return null; }
             const data = await res.json();
-            if (data.status !== 'ok') return null;
-            if (!data.profile || typeof data.profile !== 'object') return null;
-            if (!data.profile.email || !Array.isArray(data.profile.ORINsAtivos)) return null;
+            if (data.status !== 'ok') { window._debugProfileError = 'status=' + data.status; return null; }
+            if (!data.profile || typeof data.profile !== 'object') { window._debugProfileError = 'sem profile no JSON'; return null; }
+            if (!data.profile.email || !Array.isArray(data.profile.ORINsAtivos)) { window._debugProfileError = 'formato inesperado'; return null; }
+            window._debugProfileError = null;
             return data.profile;
-          } catch (err) { return null; }
+          } catch (err) { window._debugProfileError = 'exceção: ' + err.message; return null; }
         }
 
         function exibirPerfil(profile) {
