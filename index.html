@@ -3158,7 +3158,7 @@
                   <span style="font-size:8px;padding:3px 8px;border:1px solid rgba(31,216,112,0.25);color:rgba(31,216,112,0.6);letter-spacing:1px;">RED ·</span>
                   <span style="font-size:8px;padding:3px 8px;border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.6);letter-spacing:1px;">ORIN ·</span>
                 </div>
-                <div style="font-size:8px;color:rgba(168,85,247,0.7);letter-spacing:1.5px;margin-top:4px;">⚡ OPERACIONAL · BUILD v4.15 · HOTFIX3 · 16/07/2026</div>
+                <div class="build-label-dinamico" style="font-size:8px;color:rgba(168,85,247,0.7);letter-spacing:1.5px;margin-top:4px;">⚡ OPERACIONAL · BUILD v4.15</div>
               </div>
             </div>
 
@@ -3618,6 +3618,13 @@
     </div>
 
     <script>
+      // ── VERSÃO — FONTE ÚNICA DA VERDADE ───────────────────────────────
+      // Salmo 8 — HOTFIX CRÍTICO 10 | 18/07/2026
+      // Antes: o texto de versão era escrito à mão em 2+ lugares
+      // diferentes do arquivo, e sempre ficava desatualizado (foi a causa
+      // de várias confusões ontem à noite). Agora é UMA variável só —
+      // todo lugar que mostra a versão lê daqui. Só precisa editar aqui.
+      const BUILD_INFO = { versao: "HOTFIX10", data: "18/07/2026" };
       // ── STATE ──────────────────────────────────────────────────────
       // ── RANKING DE SENTINELAS POR NICHO (orientado por ranking IMC7) ──
       const NICHO_RANKING = {
@@ -3780,7 +3787,7 @@
         // bloco condicional, para cobrir QUALQUER navegação — a própria
         // função já verifica se há email disponível antes de buscar.
         if(state.userEmail) localStorage.setItem('email', state.userEmail);
-        if(typeof bootComProfile === 'function') bootComProfile();
+        if(typeof bootComProfile === 'function') bootComProfile(state.userEmail);
         if(id==='s-warroom'){
           atualizarPerfilMini();
           // F2.A — atualizar biblioteca de links para o nicho atual
@@ -5283,6 +5290,15 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
               if(Array.isArray(_r2.ORINsAtivos))   perfil['ORINs ativos']  = _r2.ORINsAtivos.length;
             }
 
+            // Salmo 8 — HOTFIX CRÍTICO 10 | 18/07/2026
+            // Relógio real, gerado agora pelo navegador — ninguém mais
+            // precisa confiar em rótulo escrito à mão. Atualiza sozinho
+            // (ver setInterval logo abaixo de inicializarMat).
+            perfil['🕐 Data/Hora Real'] = new Date().toLocaleString('pt-BR', {
+              day:'2-digit', month:'2-digit', year:'numeric',
+              hour:'2-digit', minute:'2-digit', second:'2-digit'
+            });
+
             // Salmo 8 — DIAGNÓSTICO TEMPORÁRIO | 16/07/2026
             // Linha visível de debug — remover depois de confirmado
             perfil['🔧 Diagnóstico'] = _r2
@@ -5353,6 +5369,25 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
           if(id === 's-mat'){ inicializarMat(); }
           _goOriginal(id);
         };
+
+        // Salmo 8 — HOTFIX CRÍTICO 10 | 18/07/2026
+        // Relógio vivo: enquanto o Perfil estiver aberto, redesenha a cada
+        // segundo — a linha "Data/Hora Real" sempre bate com o agora de
+        // verdade, sem depender de ninguém atualizar nada à mão.
+        setInterval(() => {
+          const telaPerfilAberta = document.getElementById('s-mat')?.classList.contains('active');
+          if (telaPerfilAberta && typeof inicializarMat === 'function') inicializarMat();
+        }, 1000);
+
+        // Preenche os rótulos de versão a partir da fonte única (BUILD_INFO),
+        // em vez de texto escrito à mão em cada lugar.
+        document.addEventListener('DOMContentLoaded', () => {
+          const rodape = document.getElementById('build-label-rodape');
+          if (rodape) rodape.textContent = `BUILD v4.15 | ${BUILD_INFO.versao} | ${BUILD_INFO.data} | SALMO 8`;
+          document.querySelectorAll('.build-label-dinamico').forEach(el => {
+            el.textContent = `⚡ OPERACIONAL · BUILD v4.15 · ${BUILD_INFO.versao} · ${BUILD_INFO.data}`;
+          });
+        });
 
         // Proteção: bloqueia botão direito dentro da tela estrutural
         document.addEventListener('contextmenu', e => {
@@ -5493,9 +5528,19 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         }
 
 
-        async function bootComProfile() {
-          const email = localStorage.getItem('email') || window.state?.email;
-          if (!email) return;
+        async function bootComProfile(emailDireto) {
+          // Salmo 8 — HOTFIX CRÍTICO 9 | 18/07/2026
+          // BUG: dependia de localStorage.getItem('email') ou de
+          // window.state?.email (campo que nem existe — o certo é
+          // state.userEmail). Se por qualquer motivo o localStorage não
+          // tivesse o valor esperado nesse exato instante, a função saía
+          // (return) SEM buscar nada e SEM erro registrado — por isso o
+          // Diagnóstico mostrava "motivo desconhecido": a função nem
+          // chegava a tentar. Agora aceita o email direto por parâmetro,
+          // vindo de quem já sabe o valor certo (go()), sem depender de
+          // adivinhação.
+          const email = emailDireto || localStorage.getItem('email') || window.state?.userEmail;
+          if (!email) { window._debugProfileError = 'email indisponível no boot'; return; }
           const profile = await recuperarProfile(email);
           if (profile) {
             window._lastProfile = profile;
@@ -5535,6 +5580,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
     </script>
 
     <div
+      id="build-label-rodape"
       style="
         position: fixed;
         bottom: 6px;
@@ -5547,7 +5593,7 @@ REFINAMENTO: Antes de entregar uma solução, avalie se faltam informações cr�
         pointer-events: none;
       "
     >
-      BUILD v4.15 | HOTFIX3 | 16/07/2026 | SALMO 8 · QUERUM ELO INSTITUCIONAL · Cirurgias 1-4 + Hotfix chat/UX/profile/export-session
+      BUILD v4.15
     </div>
 
     <!-- MAPA 1: Modal Continuar ou Novo ORIN -->
